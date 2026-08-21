@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>InventHub Exhibitions</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #1f3c88;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .exhibitions {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(300px, 1fr)
+            );
+            gap: 20px;
+        }
+
+        .exhibition-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+        }
+
+        .exhibition-card h2 {
+            color: #1f3c88;
+            margin-top: 0;
+        }
+
+        .info {
+            margin: 10px 0;
+            color: #555;
+        }
+
+        .join-button {
+            display: inline-block;
+            margin-top: 15px;
+            margin-right: 8px;
+            padding: 11px 20px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .join-button:hover {
+            background: #1d4ed8;
+        }
+
+        .website-button {
+            background: #16a34a;
+        }
+
+        .website-button:hover {
+            background: #15803d;
+        }
+
+        .empty {
+            text-align: center;
+            color: #666;
+            font-size: 18px;
+        }
+.filters {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.filters input,
+.filters select {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+.filters input {
+    flex: 1;
+    min-width: 220px;
+}
+    </style>
+
+</head>
+
+<body>
+
+    <div class="header">
+
+        <h1>🏆 InventHub Exhibitions</h1>
+
+        <p>
+            Discover real exhibitions and showcase your invention worldwide.
+        </p>
+<a
+    href="/dashboard"
+    style="
+        display: inline-block;
+        margin-top: 10px;
+        padding: 10px 18px;
+        background: white;
+        color: #1f3c88;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: bold;
+    "
+>
+    🏠 Back to Dashboard
+</a>
+    </div>
+
+
+    <div class="container">
+<div class="filters">
+
+    <input
+        type="text"
+        id="searchInput"
+        placeholder="🔍 Search exhibitions..."
+    >
+
+    <select id="scopeFilter">
+    <option value="">All Scopes</option>
+
+    <% const scopes = [...new Set(
+        exhibitions
+            .map(exhibition => exhibition.scope)
+            .filter(scope => scope)
+    )]; %>
+
+    <% scopes.forEach(scope => { %>
+
+        <option value="<%= scope %>">
+            <%= scope %>
+        </option>
+
+    <% }); %>
+
+</select>
+
+    <select id="typeFilter">
+    <option value="">All Types</option>
+
+    <% const types = [...new Set(
+        exhibitions
+            .map(exhibition => exhibition.type)
+            .filter(type => type)
+    )]; %>
+
+    <% types.forEach(type => { %>
+
+        <option value="<%= type %>">
+            <%= type %>
+        </option>
+
+    <% }); %>
+
+</select>
+
+</div>
+        <% if (exhibitions.length === 0) { %>
+
+            <p class="empty">
+                No exhibitions are currently available.
+            </p>
+
+        <% } %>
+
+
+        <div class="exhibitions">
+
+            <% exhibitions.forEach(exhibition => { %>
+
+                <div
+    class="exhibition-card"
+    data-search="<%= (exhibition.title + ' ' + exhibition.location + ' ' + exhibition.organizer + ' ' + exhibition.type).toLowerCase() %>"
+    data-scope="<%= exhibition.scope || '' %>"
+    data-type="<%= exhibition.type || '' %>"
+>
+
+                    <h2>
+                        <%= exhibition.title %>
+                    </h2>
+
+
+                    <p class="info">
+
+                        📅 <strong>Date:</strong>
+
+                        <%= exhibition.dates ||
+                            "Date not available" %>
+
+                    </p>
+
+
+                    <p class="info">
+
+                        ⏰ <strong>Registration deadline:</strong>
+
+                        <%= exhibition.registrationDeadline ||
+                            "Not available" %>
+
+                    </p>
+
+
+                    <p class="info">
+
+                        📍 <strong>Location:</strong>
+
+                        <%= exhibition.location ||
+                            "Location not available" %>
+
+                    </p>
+
+
+                    <p class="info">
+
+                        🏢 <strong>Organizer:</strong>
+
+                        <%= exhibition.organizer ||
+                            "Not available" %>
+
+                    </p>
+
+
+                    <p class="info">
+
+                        🌍 <strong>Scope:</strong>
+
+                        <%= exhibition.scope ||
+                            "International" %>
+
+                    </p>
+
+
+                    <p class="info">
+
+                        🧪 <strong>Type:</strong>
+
+                        <%= exhibition.type ||
+                            "Exhibition" %>
+
+                    </p>
+
+
+                    <% if (exhibition.website) { %>
+
+                        <a
+                            href="<%= exhibition.website %>"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="join-button website-button"
+                        >
+                            🌐 Official Website
+                        </a>
+
+                    <% } %>
+
+
+                   <% if (exhibition.registerLink) { %>
+
+    <% if (user && user.accountType === "pro") { %>
+
+        <a
+            href="<%= exhibition.registerLink %>"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="join-button"
+        >
+            🚀 Join / Register
+        </a>
+
+    <% } else { %>
+
+        <a
+            href="/pro"
+            class="join-button"
+        >
+            🔒 Pro Required — Upgrade
+        </a>
+
+    <% } %>
+
+<% } %>
+
+                </div>
+
+            <% }); %>
+
+        </div>
+
+    </div>
+<script>
+
+    const searchInput =
+        document.getElementById("searchInput");
+
+    const scopeFilter =
+        document.getElementById("scopeFilter");
+
+    const typeFilter =
+        document.getElementById("typeFilter");
+
+
+    function filterExhibitions() {
+
+        const search =
+            searchInput.value.toLowerCase().trim();
+
+        const scope =
+            scopeFilter.value.toLowerCase();
+
+        const type =
+            typeFilter.value.toLowerCase();
+
+
+        const cards =
+            document.querySelectorAll(
+                ".exhibition-card"
+            );
+
+
+        cards.forEach(card => {
+
+            const cardSearch =
+                card.dataset.search || "";
+
+            const cardScope =
+                (card.dataset.scope || "").toLowerCase();
+
+            const cardType =
+                (card.dataset.type || "").toLowerCase();
+
+
+            const matchesSearch =
+                cardSearch.includes(search);
+
+            const matchesScope =
+                !scope ||
+                cardScope.includes(scope);
+
+            const matchesType =
+                !type ||
+                cardType.includes(type);
+
+
+            if (
+                matchesSearch &&
+                matchesScope &&
+                matchesType
+            ) {
+
+                card.style.display = "";
+
+            } else {
+
+                card.style.display = "none";
+
+            }
+
+        });
+
+    }
+
+
+    searchInput.addEventListener(
+        "input",
+        filterExhibitions
+    );
+
+    scopeFilter.addEventListener(
+        "change",
+        filterExhibitions
+    );
+
+    typeFilter.addEventListener(
+        "change",
+        filterExhibitions
+    );
+
+</script>
+</body>
+
+</html>

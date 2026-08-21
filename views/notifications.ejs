@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Notifications</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="register-container">
+
+<h1>🔔 Notifications</h1>
+
+<% if (notifications.length === 0) { %>
+
+<p>You have no notifications.</p>
+
+<% } else { %>
+
+    <% notifications.forEach(function(notification){ %>
+
+<div
+    style="border:1px solid #ddd;padding:15px;margin-bottom:15px;border-radius:10px;background:<%= notification.isRead ? '#ffffff' : '#e8f4ff' %>;"
+>
+
+    <p><%= notification.message %></p>
+
+    <small><%= notification.createdAt %></small>
+
+    <% if(notification.link){ %>
+        <br><br>
+        <a href="<%= notification.link %>">View</a>
+    <% } %>
+
+</div>
+
+<% }) %>
+<% } %>
+
+<br>
+
+<a href="/dashboard">← Back to Dashboard</a>
+
+</div>
+
+</body>
+</html>

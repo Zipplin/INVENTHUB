@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Product - InventHub</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #1f3c88;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 20px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 15px;
+            color: #1f3c88;
+            text-decoration: none;
+        }
+
+        .current-image {
+            max-width: 200px;
+            margin-top: 10px;
+            border-radius: 10px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>✏️ Edit Product</h1>
+    </div>
+
+    <div class="container">
+
+        <a href="/marketplace" class="back">
+            ← Back to Marketplace
+        </a>
+
+        <div class="card">
+
+            <form
+                action="/marketplace/edit/<%= product.id %>"
+                method="POST"
+                enctype="multipart/form-data"
+            >
+
+                <label>
+                    Product Name
+                </label>
+
+                <input
+                    type="text"
+                    name="productName"
+                    value="<%= product.productName %>"
+                    required
+                >
+
+                <label>
+                    Price (₦)
+                </label>
+
+                <input
+                    type="number"
+                    name="price"
+                    value="<%= product.price %>"
+                    min="0"
+                    step="0.01"
+                    required
+                >
+
+                <label>
+                    Category
+                </label>
+
+                <select name="category">
+
+                    <option value="">
+                        Select category
+                    </option>
+
+                    <option value="Electronics"
+                        <%= product.category === "Electronics" ? "selected" : "" %>>
+                        Electronics
+                    </option>
+
+                    <option value="Agriculture"
+                        <%= product.category === "Agriculture" ? "selected" : "" %>>
+                        Agriculture
+                    </option>
+
+                    <option value="Energy"
+                        <%= product.category === "Energy" ? "selected" : "" %>>
+                        Energy
+                    </option>
+
+                    <option value="Robotics"
+                        <%= product.category === "Robotics" ? "selected" : "" %>>
+                        Robotics
+                    </option>
+
+                    <option value="Software"
+                        <%= product.category === "Software" ? "selected" : "" %>>
+                        Software
+                    </option>
+
+                    <option value="Other"
+                        <%= product.category === "Other" ? "selected" : "" %>>
+                        Other
+                    </option>
+
+                </select>
+
+                <label>
+                    Description
+                </label>
+
+                <textarea
+                    name="description"
+                    required
+                ><%= product.description %></textarea>
+
+                <label>
+                    Replace Product Image
+                </label>
+
+                <input
+                    type="file"
+                    name="image"
+                    accept="image/png,image/jpeg,image/webp"
+                >
+
+                <% if (product.image) { %>
+
+                    <p>Current image:</p>
+
+                    <img
+                        src="/uploads/<%= product.image %>"
+                        class="current-image"
+                    >
+
+                <% } %>
+
+                <button type="submit">
+                    💾 Save Changes
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

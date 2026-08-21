@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Followers - InventHub</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>👥 My Followers</h1>
+
+    <p>People following <strong><%= fullname %></strong></p>
+
+    <hr>
+
+    <% if (followers.length === 0) { %>
+
+        <div class="card">
+            <h2>No followers yet</h2>
+            <p>When people follow you, they will appear here.</p>
+        </div>
+
+    <% } else { %>
+
+        <% followers.forEach(follower => { %>
+
+            <div class="card">
+
+                <p>
+                    <strong><%= follower.fullname %></strong>
+                </p>
+
+                <% if (follower.profileImage) { %>
+
+                    <img
+                        src="/uploads/<%= follower.profileImage %>"
+                        class="profile-pic"
+                        width="60"
+                        height="60"
+                    >
+
+                <% } %>
+
+                <br>
+
+                <a href="/inventor/<%= follower.id %>">
+                    <button>View Profile</button>
+                </a>
+
+            </div>
+
+        <% }) %>
+
+    <% } %>
+
+    <br>
+
+    <a href="/dashboard">
+        ← Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>

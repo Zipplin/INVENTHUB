@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interested Investors</title>
+</head>
+<body>
+
+<h2>💰 Investors Interested in My Inventions</h2>
+
+<a href="/dashboard">← Back to Dashboard</a>
+
+<hr>
+
+<% if (investors.length === 0) { %>
+
+    <p>No investors have shown interest yet.</p>
+
+<% } else { %>
+
+    <% investors.forEach(investor => { %>
+
+        <div style="border:1px solid #ccc; padding:15px; margin-bottom:15px;">
+
+            <h3><%= investor.fullname %></h3>
+
+            <p>
+                <strong>Interested in:</strong>
+                <%= investor.title %>
+            </p>
+
+            <p>
+                <strong>Date:</strong>
+                <%= investor.createdAt %>
+            </p>
+
+            <a href="/message/<%= investor.investorId %>/<%= investor.inventionId %>">
+                <button>💬 Message Investor</button>
+            </a>
+
+        </div>
+
+    <% }) %>
+
+<% } %>
+
+</body>
+</html>

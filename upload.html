@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Invention - InventHub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="register-container">
+
+    <h1>💡 Upload Your Invention</h1>
+
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+
+        <label>Invention Title</label>
+        <input type="text" name="title" required>
+
+        <label>Category</label>
+        <input type="text" name="category" required>
+
+        <label>Industry</label>
+        <input type="text" name="industry" required>
+
+        <label>Country</label>
+        <input type="text" name="country" required>
+
+        <label>Description</label>
+        <textarea
+            name="description"
+            rows="6"
+            required></textarea>
+
+        <label>Development Stage</label>
+
+        <select name="stage">
+            <option>Idea</option>
+            <option>Prototype</option>
+            <option>Working Prototype</option>
+            <option>Tested</option>
+            <option>Ready for Manufacturing</option>
+            <option>Patented</option>
+        </select>
+
+        <label>Looking For</label>
+
+        <select name="lookingFor">
+            <option>Investor</option>
+            <option>Company</option>
+            <option>University</option>
+        </select>
+
+        <br><br>
+
+        <label>Invention Image</label><br>
+
+        <input
+            type="file"
+            name="image"
+            accept="image/*">
+
+        <br><br>
+
+        <button type="submit">
+            🚀 Publish Invention
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+</html>

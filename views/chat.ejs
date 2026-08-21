@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<div class="register-container">
+
+    <h1>💬 Chat with <%= person.fullname %></h1>
+
+    <div
+        id="messages"
+        style="
+            border:1px solid #ccc;
+            height:400px;
+            overflow-y:auto;
+            padding:15px;
+            margin-bottom:20px;
+        "
+    >
+
+        <% messages.forEach(function(msg){ %>
+
+            <div style="margin-bottom:15px;">
+
+                <% if(msg.senderId === currentUser.id){ %>
+
+                    <p style="text-align:right;">
+                        <b>You:</b><br>
+                        <%= msg.message %>
+                    </p>
+
+                <% } else { %>
+
+                    <p>
+                        <b><%= person.fullname %>:</b><br>
+                        <%= msg.message %>
+                    </p>
+
+                <% } %>
+
+            </div>
+
+        <% }) %>
+
+    </div>
+
+    <form action="/chat/<%= person.id %>" method="POST">
+
+        <textarea
+            name="message"
+            rows="4"
+            required
+            placeholder="Type your message..."
+        ></textarea>
+
+        <br><br>
+
+        <button type="submit">
+            Send
+        </button>
+
+    </form>
+
+    <br>
+
+    <a href="/conversations">
+        ← Back
+    </a>
+
+</div>
+
+<script>
+
+async function refreshChat() {
+
+    try {
+
+        const response =
+            await fetch(window.location.href);
+
+        if (!response.ok) {
+            return;
+        }
+
+        const html =
+            await response.text();
+
+        const parser =
+            new DOMParser();
+
+        const newDocument =
+            parser.parseFromString(
+                html,
+                "text/html"
+            );
+
+        const currentMessages =
+            document.getElementById("messages");
+
+        const newMessages =
+            newDocument.getElementById("messages");
+
+        if (
+            currentMessages &&
+            newMessages &&
+            currentMessages.innerHTML !==
+            newMessages.innerHTML
+        ) {
+
+            const wasAtBottom =
+                currentMessages.scrollTop +
+                currentMessages.clientHeight >=
+                currentMessages.scrollHeight - 50;
+
+            currentMessages.innerHTML =
+                newMessages.innerHTML;
+
+            // Automatically move to the newest message
+            if (wasAtBottom) {
+                currentMessages.scrollTop =
+                    currentMessages.scrollHeight;
+            }
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "❌ Could not refresh chat:",
+            error
+        );
+
+    }
+
+}
+
+setInterval(
+    refreshChat,
+    3000
+);
+
+</script>
+
+</body>
+</html>

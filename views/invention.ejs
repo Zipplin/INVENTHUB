@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= invention.title %></title>
+</head>
+<body>
+
+<a href="/dashboard">← Back to Dashboard</a>
+
+<hr>
+
+<h1><%= invention.title %></h1>
+
+<p>
+    <strong>Inventor:</strong>
+    <%= invention.fullname %>
+
+    <% if (invention.accountType === "pro") { %>
+
+        <span style="
+            display:inline-block;
+            margin-left:8px;
+            padding:4px 10px;
+            background:#16a34a;
+            color:white;
+            border-radius:12px;
+            font-size:12px;
+            font-weight:bold;
+        ">
+            ⭐ PRO INVENTOR
+        </span>
+
+    <% } %>
+</p>
+
+<% if (invention.image) { %>
+    <img
+        src="/uploads/<%= invention.image %>"
+        width="500"
+        style="max-width:100%; border-radius:10px;">
+<% } %>
+
+<hr>
+
+<p><strong>Category:</strong> <%= invention.category %></p>
+
+<p><strong>Industry:</strong> <%= invention.industry %></p>
+
+<p><strong>Country:</strong> <%= invention.country %></p>
+
+<p><strong>Stage:</strong> <%= invention.stage %></p>
+
+<p><strong>Looking For:</strong> <%= invention.lookingFor %></p>
+
+<hr>
+
+<h2>Description</h2>
+
+<p><%= invention.description %></p>
+
+<hr>
+
+<p>❤️ <strong><%= invention.likes %></strong> Likes</p>
+
+<form action="/like/<%= invention.id %>" method="POST">
+    <button>❤️ Like</button>
+</form>
+
+<br>
+
+<a href="/message/<%= invention.userId %>/<%= invention.id %>">
+    <button>💬 Contact Inventor</button>
+</a>
+
+<form action="/interest/<%= invention.id %>" method="POST">
+    <button>
+        💰 I'm Interested
+    </button>
+</form>
+
+</body>
+</html>

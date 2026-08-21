@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>InventHub AI</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="container">
+
+<h1>🤖 InventHub AI Assistant</h1>
+
+<p>
+Ask anything about your invention.
+</p>
+
+<form action="/ai" method="POST">
+
+    <textarea
+        name="prompt"
+        rows="8"
+        style="width:100%;padding:15px;"
+        placeholder="Describe your invention or ask a question..."></textarea>
+
+    <br><br>
+
+    <button type="submit">
+        Ask AI
+    </button>
+
+</form>
+
+<% if(answer){ %>
+
+<hr>
+
+<h2>AI Response</h2>
+
+<div class="card">
+
+<%= answer %>
+
+</div>
+
+<% } %>
+
+<br>
+
+<a href="/dashboard">
+← Back to Dashboard
+</a>
+
+</div>
+
+</body>
+</html>

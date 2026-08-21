@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Sell a Product - InventHub</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #1f3c88;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .form-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 20px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .button:hover {
+            background: #1d4ed8;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 15px;
+            text-decoration: none;
+            color: #1f3c88;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="header">
+
+        <h1>🏪 Sell on InventHub</h1>
+
+        <p>
+            List your invention or product for buyers to discover.
+        </p>
+
+    </div>
+
+    <div class="container">
+
+        <a href="/marketplace" class="back">
+            ← Back to Marketplace
+        </a>
+
+        <div class="form-card">
+
+            <form
+                action="/marketplace/add"
+                method="POST"
+                enctype="multipart/form-data"
+            >
+
+                <label>
+                    Product Name
+                </label>
+
+                <input
+                    type="text"
+                    name="productName"
+                    required
+                    placeholder="e.g. Solar Phone Charger"
+                >
+
+                <label>
+                    Price (₦)
+                </label>
+
+                <input
+                    type="number"
+                    name="price"
+                    min="0"
+                    step="0.01"
+                    required
+                    placeholder="50000"
+                >
+
+                <label>
+                    Category
+                </label>
+
+                <select name="category">
+
+                    <option value="">
+                        Select category
+                    </option>
+
+                    <option value="Electronics">
+                        Electronics
+                    </option>
+
+                    <option value="Agriculture">
+                        Agriculture
+                    </option>
+
+                    <option value="Energy">
+                        Energy
+                    </option>
+
+                    <option value="Robotics">
+                        Robotics
+                    </option>
+
+                    <option value="Software">
+                        Software
+                    </option>
+
+                    <option value="Other">
+                        Other
+                    </option>
+
+                </select>
+
+                <label>
+                    Description
+                </label>
+
+                <textarea
+                    name="description"
+                    required
+                    placeholder="Describe your product..."
+                ></textarea>
+
+                <label>
+                    Product Image
+                </label>
+
+                <input
+                    type="file"
+                    name="image"
+                    accept="image/png,image/jpeg,image/webp"
+                    required
+                >
+
+                <button
+                    type="submit"
+                    class="button"
+                >
+                    🚀 Publish Product
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

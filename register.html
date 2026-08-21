@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - InventHub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="register-container">
+
+    <h1>Create Your InventHub Account</h1>
+    <p>Join the world's largest inventor community.</p>
+
+    <form action="/register" method="POST">
+
+        <label>Full Name</label>
+        <input type="text" name="fullname" placeholder="Enter your full name">
+
+        <label>Email</label>
+        <input type="email" name="email" placeholder="Enter your email">
+
+        <label>Country</label>
+        <input type="text" name="country" placeholder="Country">
+
+        <label>City</label>
+        <input type="text" name="city" placeholder="City">
+
+        <select name="accountType">
+            <option value="inventor">Inventor</option>
+            <option value="investor">Investor</option>
+            <option value="company">Company</option>
+            <option value="university">University</option>
+
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Create password">
+
+        <button>Create Account</button>
+
+    </form>
+
+    <p>
+        Already have an account?
+        <a href="#">Login</a>
+    </p>
+
+</div>
+
+</body>
+</html>

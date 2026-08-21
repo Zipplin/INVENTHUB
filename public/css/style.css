@@ -1,0 +1,1139 @@
+/* =========================
+   GENERAL
+========================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#eef2f7;
+    color:#333;
+}
+
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:30px auto;
+}
+
+/* =========================
+   NAVIGATION
+========================= */
+
+.menu{
+    background:#1e3a8a;
+    padding:18px;
+    border-radius:12px;
+    margin-bottom:30px;
+}
+
+.menu a{
+    color:white;
+    text-decoration:none;
+    margin-right:20px;
+    font-weight:bold;
+    transition:.3s;
+}
+
+.menu a:hover{
+    color:#facc15;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.card{
+    background:white;
+    border-radius:15px;
+    padding:25px;
+    margin-bottom:30px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+/* =========================
+   IMAGES
+========================= */
+
+.card img{
+    width:100%;
+    max-height:350px;
+    object-fit:cover;
+    border-radius:12px;
+    margin:15px 0;
+}
+
+/* =========================
+   PROFILE PHOTO
+========================= */
+
+.profile-pic{
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    object-fit:cover;
+    vertical-align:middle;
+    margin-right:10px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+button{
+    background:#2563eb;
+    color:white;
+    border:none;
+    padding:10px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    margin:5px;
+    font-size:15px;
+    transition:.3s;
+}
+
+button:hover{
+    background:#1d4ed8;
+}
+
+/* =========================
+   TEXTAREA
+========================= */
+
+textarea{
+    width:100%;
+    border:1px solid #ccc;
+    border-radius:8px;
+    padding:10px;
+    resize:vertical;
+}
+
+/* =========================
+   BADGES
+========================= */
+
+.badge{
+    display:inline-block;
+    background:#2563eb;
+    color:white;
+    padding:6px 14px;
+    border-radius:20px;
+    font-size:13px;
+    margin-right:8px;
+}
+
+/* =========================
+   HEADINGS
+========================= */
+
+h1,h2,h3{
+    color:#1e293b;
+    margin-bottom:15px;
+}
+
+hr{
+    margin:20px 0;
+    border:none;
+    border-top:1px solid #ddd;
+}
+/* =========================
+   HERO SECTION
+========================= */
+
+.hero{
+    background:linear-gradient(135deg,#1e3a8a,#2563eb);
+    color:white;
+    text-align:center;
+    padding:100px 20px;
+    border-radius:20px;
+    margin-bottom:40px;
+}
+
+.hero h1{
+    font-size:60px;
+    margin-bottom:20px;
+    color:white;
+}
+
+.hero p{
+    font-size:22px;
+    margin-bottom:30px;
+}
+
+.hero-buttons button{
+    margin:10px;
+    font-size:18px;
+    padding:15px 30px;
+}
+
+/* =========================
+   FEATURES
+========================= */
+
+.features{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:25px;
+}
+
+.feature-card{
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.feature-card:hover{
+    transform:translateY(-8px);
+}
+
+.feature-card h2{
+    margin-bottom:15px;
+}
+
+/* =========================
+   DASHBOARD
+========================= */
+
+.dashboard-wrapper{
+    width:90%;
+    max-width:1200px;
+    margin:30px auto;
+}
+
+.dashboard-content{
+    background:transparent;
+}
+
+
+/* =========================
+   DASHBOARD MENU
+========================= */
+
+.dashboard-wrapper .menu{
+    background:#1e3a8a;
+    padding:18px 25px;
+    border-radius:14px;
+    margin-bottom:30px;
+
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:10px;
+}
+
+.dashboard-wrapper .menu a{
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+
+    padding:10px 14px;
+    border-radius:8px;
+
+    margin:0;
+    transition:.3s;
+}
+
+.dashboard-wrapper .menu a:hover{
+    background:#2563eb;
+    color:white;
+}
+
+
+/* =========================
+   DASHBOARD TITLE
+========================= */
+
+.dashboard-content h1{
+    font-size:42px;
+    margin-bottom:15px;
+}
+
+.dashboard-content h2{
+    font-size:28px;
+}
+
+
+/* =========================
+   INVENTION SECTION
+========================= */
+
+.dashboard-content .card{
+    background:white;
+    color:#333;
+
+    border-radius:15px;
+    padding:25px;
+    margin:25px 0;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+}
+
+
+/* =========================
+   INVENTION TEXT
+========================= */
+
+.dashboard-content .card p{
+    margin:10px 0;
+    line-height:1.6;
+}
+
+
+/* =========================
+   DASHBOARD DIVIDER
+========================= */
+
+.dashboard-content hr{
+    margin:30px 0;
+    border:none;
+    border-top:1px solid #d9dee7;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:700px){
+
+    .dashboard-wrapper{
+        width:95%;
+    }
+
+    .dashboard-wrapper .menu{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .dashboard-wrapper .menu a{
+        text-align:center;
+    }
+
+    .dashboard-content h1{
+        font-size:32px;
+    }
+
+}
+
+/* =========================
+   DASHBOARD LAYOUT
+========================= */
+
+.dashboard-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar {
+    width: 250px;
+    background: #1e3a8a;
+    color: white;
+
+    padding: 25px 18px;
+
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* LOGO */
+
+.sidebar-logo {
+    font-size: 24px;
+    font-weight: bold;
+    padding: 10px;
+    margin-bottom: 30px;
+}
+
+
+/* NAVIGATION */
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sidebar-nav a,
+.sidebar-bottom a {
+    color: white;
+    text-decoration: none;
+
+    padding: 13px 15px;
+    border-radius: 8px;
+
+    font-weight: bold;
+
+    transition: 0.3s;
+}
+
+.sidebar-nav a:hover,
+.sidebar-bottom a:hover {
+    background: #2563eb;
+}
+
+
+/* ACTIVE LINK */
+
+.sidebar-nav a.active {
+    background: #2563eb;
+}
+
+
+/* BOTTOM */
+
+.sidebar-bottom {
+    margin-top: auto;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+
+/* UPLOAD */
+
+.upload-link {
+    background: #2563eb;
+}
+
+
+/* =========================
+   MAIN CONTENT
+========================= */
+
+.dashboard-main {
+    margin-left: 250px;
+
+    width: calc(100% - 250px);
+
+    padding: 40px;
+}
+
+
+/* TITLE */
+
+.dashboard-main h1 {
+    font-size: 40px;
+    margin-bottom: 15px;
+}
+
+.dashboard-main h2 {
+    margin-bottom: 20px;
+}
+
+
+/* SECTION */
+
+.section-title {
+    margin-top: 40px;
+
+    padding-bottom: 15px;
+
+    border-bottom: 2px solid #ddd;
+}
+
+
+/* =========================
+   INVENTION CARDS
+========================= */
+
+.dashboard-main .card {
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 15px;
+
+    margin: 25px 0;
+
+    box-shadow: 0 5px 20px rgba(0,0,0,.08);
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    .sidebar {
+        width: 200px;
+    }
+
+    .dashboard-main {
+        margin-left: 200px;
+        width: calc(100% - 200px);
+        padding: 20px;
+    }
+
+    .dashboard-main h1 {
+        font-size: 30px;
+    }
+
+}
+
+/* FIX DASHBOARD CONTENT POSITION */
+
+.dashboard-main {
+    margin-left: 250px !important;
+    width: calc(100% - 250px) !important;
+    padding: 40px !important;
+    min-height: 100vh;
+}
+
+/* Prevent the old .container rules from interfering */
+.dashboard-main.container {
+    width: auto !important;
+    max-width: none !important;
+    margin-top: 0 !important;
+    margin-right: 0 !important;
+    margin-bottom: 0 !important;
+}
+.dashboard-main .card {
+    background: #ffffff !important;
+    color: #333 !important;
+}
+.dashboard-main .section-title {
+    color: #1e293b !important;
+}
+/* =========================
+   INVENTION CARDS
+========================= */
+
+.invention-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 28px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    border: 1px solid #e5e7eb;
+}
+
+.invention-header {
+    margin-bottom: 18px;
+}
+
+.invention-header h2 {
+    font-size: 26px;
+    margin-bottom: 12px;
+    color: #1e293b;
+}
+
+.invention-image {
+    width: 100%;
+    max-height: 420px;
+    object-fit: cover;
+    border-radius: 14px;
+    margin: 10px 0 20px;
+}
+
+.invention-description {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #475569;
+    margin-bottom: 20px;
+}
+
+.invention-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.invention-actions form {
+    margin: 0;
+}
+
+.likes {
+    font-weight: bold;
+    color: #334155;
+    margin-right: 10px;
+}
+
+.invention-actions a {
+    text-decoration: none;
+}
+
+.invention-actions button {
+    margin: 0;
+}
+
+.invention-card hr {
+    margin: 25px 0;
+    border: none;
+    border-top: 1px solid #e2e8f0;
+}
+
+.invention-card h3 {
+    margin-bottom: 15px;
+}
+
+.comments {
+    margin-top: 20px;
+}
+
+.comment {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+}
+
+.comment strong {
+    color: #1e3a8a;
+}
+
+.comment p {
+    margin-top: 5px;
+    color: #475569;
+}
+
+.no-comments {
+    color: #64748b;
+    margin-top: 15px;
+}
+/* =========================
+   INVENTION CARD
+========================= */
+
+.invention-title {
+    font-size: 26px;
+    margin-bottom: 12px;
+    color: #1e293b;
+}
+
+.invention-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+}
+
+.invention-image {
+    width: 100%;
+    max-height: 380px;
+    object-fit: cover;
+    border-radius: 14px;
+    margin: 15px 0;
+}
+/* =========================
+   DASHBOARD INVENTION CARDS
+========================= */
+
+.dashboard-main .card {
+    max-width: 100%;
+    padding: 28px;
+    margin-bottom: 25px;
+}
+
+.dashboard-main .card h2 {
+    font-size: 26px;
+    margin-bottom: 12px;
+}
+
+.dashboard-main .card p {
+    line-height: 1.6;
+}
+
+.dashboard-main .card hr {
+    margin: 22px 0;
+}
+/* =========================
+   DASHBOARD STAT CARDS
+========================= */
+
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.stat-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 22px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.stat-icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 15px;
+    background: #eef2ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    flex-shrink: 0;
+}
+
+.stat-card p {
+    margin: 0 0 5px;
+    color: #475569;
+    font-size: 15px;
+}
+
+.stat-card h2 {
+    margin: 0 0 5px;
+    font-size: 28px;
+    color: #0f172a;
+}
+
+.stat-card span {
+    color: #2563eb;
+    font-size: 13px;
+}
+
+@media (max-width: 900px) {
+
+    .dashboard-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .dashboard-stats {
+        grid-template-columns: 1fr;
+    }
+
+}
+/* =========================
+   STAT CARD POLISH
+========================= */
+
+.dashboard-stats {
+    gap: 22px;
+    margin: 30px 0 35px;
+}
+
+.stat-card {
+    min-height: 145px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.stat-icon {
+    font-size: 30px;
+}
+
+.stat-card h2 {
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.stat-card p {
+    font-size: 15px;
+    font-weight: 500;
+}
+/* =========================
+   LATEST INVENTIONS
+========================= */
+
+.dashboard-main > hr {
+    margin: 35px 0 25px;
+}
+
+.dashboard-main > h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.dashboard-main .card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+    padding: 28px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 18px rgba(15, 23, 42, 0.06);
+}
+
+.dashboard-main .card h2 {
+    font-size: 24px;
+    margin-bottom: 12px;
+}
+
+.dashboard-main .card img {
+    display: block;
+    width: 100%;
+    max-height: 320px;
+    object-fit: cover;
+    border-radius: 14px;
+    margin: 20px 0;
+}
+
+.dashboard-main .card p {
+    color: #475569;
+    line-height: 1.6;
+}
+
+.dashboard-main .card .badge {
+    margin-top: 8px;
+}
+/* =========================
+   INVENTION ACTIONS
+========================= */
+
+.invention-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.invention-actions a {
+    text-decoration: none;
+}
+
+.invention-actions form {
+    margin: 0;
+}
+
+.invention-actions button {
+    margin: 0;
+    white-space: nowrap;
+}
+.inventor-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.inventor-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.inventor-link .profile-pic {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+}
+.inventor-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.inventor-row form {
+    margin: 0;
+}
+/* =========================
+   LIKE & COMMENT AREA
+========================= */
+
+.card form {
+    margin-top: 12px;
+}
+
+.card textarea {
+    background: #f8fafc;
+    border: 1px solid #dbe3ef;
+    padding: 12px;
+    font-size: 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.card textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.card textarea::placeholder {
+    color: #94a3b8;
+}
+
+.card h3 {
+    font-size: 18px;
+    margin-top: 25px;
+    margin-bottom: 12px;
+}
+
+.card hr {
+    margin: 22px 0;
+    border-top: 1px solid #e5e7eb;
+}
+
+.card p strong {
+    color: #1e293b;
+}
+/* Like & Comment buttons */
+
+.card button {
+    border: none;
+    border-radius: 10px;
+    padding: 11px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+}
+
+.card button:active {
+    transform: translateY(0);
+}
+/* Comments section */
+
+.card h3 {
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+.card h3 + p,
+.card h3 ~ p {
+    margin: 8px 0;
+    padding: 10px 14px;
+    background: #f5f7fb;
+    border-radius: 10px;
+    line-height: 1.5;
+}
+
+.card h3 ~ p strong {
+    color: #1f2937;
+}
+/* ==============================
+   INVENTION CARDS
+   ============================== */
+
+.card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 28px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e8ebf2;
+}
+
+.card h2 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: #172033;
+}
+
+.card p {
+    color: #4b5563;
+    line-height: 1.6;
+}
+
+/* Category and industry badges */
+
+.badge {
+    display: inline-block;
+    background: #2563eb;
+    color: white;
+    padding: 7px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    margin-right: 8px;
+    margin-bottom: 10px;
+}
+
+/* Invention image */
+
+.card img {
+    max-width: 100%;
+    border-radius: 15px;
+    display: block;
+    margin-bottom: 20px;
+}
+
+/* Buttons */
+
+.card button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+.card button:hover {
+    background: #1d4ed8;
+}
+
+/* Comments */
+
+.card textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #d9deea;
+    border-radius: 12px;
+    padding: 13px;
+    font-size: 15px;
+    resize: vertical;
+    margin-top: 8px;
+}
+
+.card textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
+.card h3 {
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+.card h3 ~ p {
+    margin: 8px 0;
+    padding: 10px 14px;
+    background: #f5f7fb;
+    border-radius: 10px;
+}
+/* ==============================
+   INVENTION ACTION BUTTONS
+   ============================== */
+
+.card form {
+    display: inline-block;
+    margin: 0;
+}
+
+.card a {
+    text-decoration: none;
+}
+
+.card a button,
+.card form button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 11px 18px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.card a button:hover,
+.card form button:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+/* Keep comment form full width */
+.card form[action^="/comment/"] {
+    display: block;
+    width: 100%;
+}
+
+.card form[action^="/comment/"] textarea {
+    width: 100%;
+    box-sizing: border-box;
+}
+/* ==============================
+   FINAL INVENTION CARD POLISH
+   ============================== */
+
+.card {
+    padding: 32px;
+}
+
+.card h2 {
+    font-size: 28px;
+    margin-bottom: 18px;
+    text-transform: capitalize;
+}
+
+.card > p {
+    margin: 12px 0;
+}
+
+.card hr {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 24px 0;
+}
+
+/* Like count */
+
+.card p:first-of-type {
+    font-size: 17px;
+}
+
+/* Make action buttons sit nicely together */
+
+.card a button,
+.card form button {
+    min-height: 44px;
+}
+
+/* Better spacing between cards */
+
+.card + .card {
+    margin-top: 28px;
+}
+
+/* Mobile layout */
+
+@media (max-width: 768px) {
+
+    .card {
+        padding: 20px;
+        border-radius: 14px;
+    }
+
+    .card h2 {
+        font-size: 23px;
+    }
+
+    .card a button,
+    .card form button {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .card form {
+        width: 100%;
+    }
+
+}

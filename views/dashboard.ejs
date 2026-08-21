@@ -1,0 +1,412 @@
+<<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>InventHub Dashboard</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            💡 <span>InventHub</span>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="/dashboard" class="active">
+                🏠 Dashboard
+            </a>
+
+            <a href="/my-inventions">
+                💡 My Inventions
+            </a>
+<a href="/exhibitions">
+    🏆 Exhibitions
+</a>
+<a href="/marketplace">
+    🛒 Marketplace
+</a>
+            <a href="/bookmarks">
+                ⭐ Bookmarks
+            </a>
+
+           <a href="/conversations" id="messagesLink">
+    💬 Messages
+    <span id="messageBadge"
+          style="
+              display:none;
+              background:#e53935;
+              color:white;
+              border-radius:50%;
+              padding:2px 7px;
+              font-size:12px;
+              margin-left:5px;
+          ">
+        0
+    </span>
+</a>
+
+            <a href="/notifications">
+                🔔 Notifications
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <a href="/upload.html" class="upload-link">
+                ➕ Upload Invention
+            </a>
+
+            <a href="/logout">
+                🚪 Logout
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <main class="dashboard-main">
+
+        <h1>🚀 InventHub Dashboard</h1>
+
+        <h2>
+            Welcome <%= fullname %> 👋
+        </h2>
+
+        <a href="/profile.html">
+            Change Profile Picture
+        </a>
+ <div class="dashboard-stats">
+
+    <a href="/my-inventions" class="stat-link">
+    <div class="stat-card">
+        <div class="stat-icon">💡</div>
+        <div>
+            <p>My Inventions</p>
+            <h2><%= totalInventions %></h2>
+            <span>Total published</span>
+        </div>
+    </div>
+</a>
+   <a href="/my-inventions" class="stat-link">
+    <div class="stat-card">
+        <div class="stat-icon">❤️</div>
+        <div>
+            <p>Likes Received</p>
+            <h2><%= totalLikes %></h2>
+            <span>Total likes</span>
+        </div>
+    </div>
+</a>
+
+    <a href="/followers" class="stat-link">
+    <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div>
+            <p>Followers</p>
+            <h2><%= followers %></h2>
+            <span>People following you</span>
+        </div>
+    </div>
+</a>
+
+    <a href="/following" class="stat-link">
+    <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div>
+            <p>Following</p>
+            <h2><%= following %></h2>
+            <span>People you follow</span>
+        </div>
+    </div>
+</a>
+
+</div>
+
+
+
+
+
+<hr>
+
+<h2>Latest Published Inventions</h2>
+
+<% if(inventions.length==0){ %>
+
+<h3>No inventions have been published yet.</h3>
+
+<% } else { %>
+
+<% inventions.forEach(function(invention){ %>
+
+<div class="card">
+
+    <h2>
+        <%= invention.title %>
+    </h2>
+
+    <div class="invention-meta">
+
+    <span class="badge">
+        <%= invention.category %>
+    </span>
+
+    <span class="badge">
+        <%= invention.industry %>
+    </span>
+
+</div>
+    <p>
+        ❤️ <%= invention.likes || 0 %> Likes
+    </p>
+
+    <form action="/like/<%= invention.id %>" method="POST">
+    <button type="submit">
+        ❤️ Like
+    </button>
+</form>
+
+    <form action="/comment/<%= invention.id %>" method="POST">
+
+        <textarea
+            name="comment"
+            placeholder="Write a comment..."
+            required
+            rows="2"></textarea>
+
+        <br>
+
+        <button type="submit">
+            💬 Comment
+        </button>
+
+    </form>
+
+    <hr>
+
+    <h3>💬 Comments</h3>
+
+    <% if (invention.comments && invention.comments.length > 0) { %>
+
+        <% invention.comments.forEach(comment => { %>
+
+            <p>
+                <strong><%= comment.fullname %>:</strong>
+                <%= comment.comment %>
+            </p>
+
+        <% }) %>
+
+    <% } else { %>
+
+        <p>No comments yet.</p>
+
+    <% } %>
+
+</div>
+
+<hr>
+
+<div class="card">
+
+<% if(invention.image){ %>
+
+<img
+    src="/uploads/<%= invention.image %>"
+    class="invention-image"
+    alt="Invention image"
+>
+
+<% } %>
+<p>
+    <p class="inventor-section">
+        <div class="inventor-row">
+    <strong>Inventor:</strong>
+
+    <a href="/inventor/<%= invention.userId %>" class="inventor-link">
+
+        <% if (invention.profileImage) { %>
+
+            <img
+                src="/uploads/<%= invention.profileImage %>"
+                class="profile-pic"
+                alt="<%= invention.fullname %>"
+            >
+
+        <% } else { %>
+
+            <img
+                src="https://via.placeholder.com/60"
+                class="profile-pic"
+                alt="Profile picture"
+            >
+
+        <% } %>
+
+        <span><%= invention.fullname %></span>
+
+    </a>
+    </div>
+</p>
+</p>
+<% if (invention.userId != userId) { %>
+ 
+    
+
+    <% if (invention.isFollowing) { %>
+
+    <form action="/unfollow/<%= invention.userId %>" method="POST">
+        <button type="submit">
+            ❌ Unfollow
+        </button>
+    </form>
+
+<% } else { %>
+
+    <form action="/follow/<%= invention.userId %>" method="POST">
+        <button type="submit">
+            ➕ Follow
+        </button>
+    </form>
+
+<%
+    const callRoom = [userId, invention.userId]
+        .sort((a, b) => a - b)
+        .join("-");
+%>
+
+<a href="/video-call/<%= callRoom %>">
+    <button type="button">
+        📹 Video Call
+    </button>
+</a>
+
+
+<% } %>
+<p>
+    <strong>🌍 Country:</strong>
+    <%= invention.country %>
+</p>
+
+<span class="badge">
+    <%= invention.category %>
+</span>
+<span class="badge"><%= invention.industry %></span>
+
+</p>
+
+<% } %>
+
+
+<p><strong>🛠 Stage:</strong> <%= invention.stage %></p>
+
+<p><strong>🤝 Looking For:</strong> <%= invention.lookingFor %></p>
+
+<hr>
+
+<p><%= invention.description %></p>
+<hr>
+<div class="invention-actions">
+<a href="/message/<%= invention.userId %>/<%= invention.id %>">
+    <button>💬 Contact Inventor</button>
+</a>
+
+
+<a href="/invention/<%= invention.id %>">
+    <button>📄 View Details</button>
+</a>
+<form action="/interest/<%= invention.id %>" method="POST">
+    <button type="submit">
+        💰 I'm Interested
+    </button>
+</form>
+
+<form action="/bookmark/<%= invention.id %>" method="POST">
+    <button type="submit">
+        ⭐ Save
+    </button>
+</form>
+</div>
+
+<% }) %>
+
+<% } %>
+</div>
+</div>
+<script>
+
+async function checkUnreadMessages() {
+
+    try {
+
+        const response =
+            await fetch("/api/unread-messages");
+
+        if (!response.ok) {
+            return;
+        }
+
+        const data =
+            await response.json();
+
+        const badge =
+            document.getElementById("messageBadge");
+
+        if (!badge) {
+            return;
+        }
+
+        if (data.unread > 0) {
+
+            badge.textContent =
+                data.unread > 99
+                    ? "99+"
+                    : data.unread;
+
+            badge.style.display =
+                "inline-block";
+
+        } else {
+
+            badge.style.display =
+                "none";
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Could not check messages:",
+            error
+        );
+
+    }
+
+}
+
+// Check immediately
+checkUnreadMessages();
+
+// Then check every 5 seconds
+setInterval(
+    checkUnreadMessages,
+    5000
+);
+
+</script>
+</body>
+</html>

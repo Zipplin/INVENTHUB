@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Saved Inventions</title>
+</head>
+<body>
+
+<h2>⭐ Saved Inventions</h2>
+
+<a href="/dashboard">← Back to Dashboard</a>
+
+<hr>
+
+<% if (bookmarks.length === 0) { %>
+
+    <p>You haven't saved any inventions yet.</p>
+
+<% } else { %>
+
+    <% bookmarks.forEach(item => { %>
+
+        <div style="border:1px solid #ccc; padding:15px; margin-bottom:15px;">
+
+            <h3><%= item.title %></h3>
+
+            <p><strong>Inventor:</strong> <%= item.fullname %></p>
+
+            <p><%= item.description %></p>
+
+            <a href="/invention/<%= item.id %>">
+                <button>📄 View Details</button>
+            </a>
+
+            <form action="/remove-bookmark/<%= item.id %>" method="POST">
+                <button type="submit">
+                    ❌ Remove Bookmark
+                </button>
+            </form>
+
+        </div>
+
+    <% }) %>
+
+<% } %>
+
+</body>
+</html>

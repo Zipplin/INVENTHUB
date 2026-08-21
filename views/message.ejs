@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Send Message</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="register-container">
+
+<h1>💬 Message Inventor</h1>
+
+<form action="/send-message" method="POST">
+
+    <input type="hidden" name="receiverId" value="<%= receiverId %>">
+    <input type="hidden" name="inventionId" value="<%= inventionId %>">
+
+    <textarea
+        name="message"
+        rows="6"
+        placeholder="Write your message..."
+        required></textarea>
+
+    <br><br>
+
+    <button type="submit">
+        Send Message
+    </button>
+
+</form>
+
+</div>
+
+</body>
+</html>

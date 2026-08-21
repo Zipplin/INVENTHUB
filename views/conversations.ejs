@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Conversations</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="register-container">
+
+<h1>💬 Conversations</h1>
+
+<% if(conversations.length === 0){ %>
+
+<p>No conversations yet.</p>
+
+<% } else { %>
+
+<% conversations.forEach(function(person){ %>
+
+<div style="border:1px solid #ddd;padding:15px;margin-bottom:15px;border-radius:10px;">
+
+<h3><%= person.fullname %></h3>
+
+<p><%= person.email %></p>
+
+<a href="/chat/<%= person.id %>">
+Open Chat →
+</a>
+
+</div>
+
+<% }) %>
+
+<% } %>
+
+<br>
+
+<a href="/dashboard">← Back to Dashboard</a>
+
+</div>
+
+</body>
+</html>

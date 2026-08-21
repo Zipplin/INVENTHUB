@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Company Profile - InventHub</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #1f3c88;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        .button {
+            margin-top: 20px;
+            padding: 12px 20px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 15px;
+            color: #1f3c88;
+            text-decoration: none;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="header">
+
+        <h1>🏢 Company Profile</h1>
+
+        <p>
+            Build your company's presence on InventHub.
+        </p>
+
+    </div>
+
+    <div class="container">
+
+        <a href="/dashboard" class="back">
+            ← Back to Dashboard
+        </a>
+
+        <div class="card">
+
+            <form
+                action="/company-profile"
+                method="POST"
+                enctype="multipart/form-data"
+            >
+
+                <label>
+                    Company Name
+                </label>
+
+                <input
+                    type="text"
+                    name="companyName"
+                    value="<%= user.companyName || '' %>"
+                    required
+                    placeholder="Your company name"
+                >
+
+                <label>
+                    Company Description
+                </label>
+
+                <textarea
+                    name="companyDescription"
+                    required
+                    placeholder="Tell people about your company..."
+                ><%= user.companyDescription || '' %></textarea>
+
+                <label>
+                    Company Logo
+                </label>
+
+                <input
+                    type="file"
+                    name="companyLogo"
+                    accept="image/png,image/jpeg,image/webp"
+                >
+
+                <button
+                    type="submit"
+                    class="button"
+                >
+                    💾 Save Company Profile
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Inventions</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="register-container">
+
+    <h1>📁 My Inventions</h1>
+
+    <h2>Welcome <%= fullname %> 👋</h2>
+
+    <p>
+        <a href="/dashboard">🏠 Back to Dashboard</a>
+    </p>
+
+    <hr>
+
+    <% if (inventions.length === 0) { %>
+
+        <h3>You haven't uploaded any inventions yet.</h3>
+
+    <% } else { %>
+
+        <% inventions.forEach(function(invention){ %>
+
+            <div style="border:1px solid #ccc;padding:15px;margin-bottom:20px;border-radius:10px;">
+
+                <% if (invention.image) { %>
+
+                    <img
+                        src="/uploads/<%= invention.image %>"
+                        width="300"
+                        style="border-radius:10px;margin-bottom:15px;">
+
+                <% } %>
+
+                <h2><%= invention.title %></h2>
+
+                <p><strong>Category:</strong> <%= invention.category %></p>
+
+                <p><strong>Industry:</strong> <%= invention.industry %></p>
+
+                <p><strong>Country:</strong> <%= invention.country %></p>
+
+                <p><strong>Stage:</strong> <%= invention.stage %></p>
+
+                <p><strong>Looking For:</strong> <%= invention.lookingFor %></p>
+
+                <p><%= invention.description %></p>
+
+                <hr>
+
+               <a href="/edit/<%= invention.id %>">
+    <button>Edit</button>
+</a> 
+                <form action="/delete/<%= invention.id %>" method="POST" style="display:inline;">
+    <button
+        type="submit"
+        onclick="return confirm('Delete this invention?')">
+        Delete
+    </button>
+</form>
+
+            </div>
+
+        <% }) %>
+
+    <% } %>
+
+</div>
+
+</body>
+</html>

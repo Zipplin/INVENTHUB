@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title><%= product.productName %> - InventHub</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #1f3c88;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+        }
+
+        .product-image {
+            width: 100%;
+            max-height: 500px;
+            object-fit: contain;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .price {
+            font-size: 28px;
+            font-weight: bold;
+            color: #16a34a;
+            margin: 15px 0;
+        }
+
+        .category {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #e5e7eb;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+
+        .company {
+            margin-top: 25px;
+            padding: 18px;
+            background: #f3f4f6;
+            border-radius: 12px;
+        }
+
+        .company-logo {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            vertical-align: middle;
+            border-radius: 8px;
+            margin-right: 10px;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 20px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 15px;
+            color: #1f3c88;
+            text-decoration: none;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="header">
+
+        <h1>🛒 InventHub Marketplace</h1>
+
+    </div>
+
+    <div class="container">
+
+        <a href="/marketplace" class="back">
+            ← Back to Marketplace
+        </a>
+
+        <div class="card">
+
+            <% if (product.image) { %>
+
+                <img
+                    src="/uploads/<%= product.image %>"
+                    alt="<%= product.productName %>"
+                    class="product-image"
+                >
+
+            <% } %>
+
+            <h1>
+                <%= product.productName %>
+            </h1>
+
+            <% if (product.category) { %>
+
+                <span class="category">
+                    <%= product.category %>
+                </span>
+
+            <% } %>
+
+            <div class="price">
+                ₦<%= Number(product.price).toLocaleString() %>
+            </div>
+
+            <h3>
+                Description
+            </h3>
+
+            <p>
+                <%= product.description %>
+            </p>
+
+            <div class="company">
+
+                <% if (product.companyLogo) { %>
+
+                    <img
+                        src="/uploads/<%= product.companyLogo %>"
+                        alt="Company Logo"
+                        class="company-logo"
+                    >
+
+                <% } %>
+
+                <strong>
+                    <%= product.companyName ||
+                        product.fullname %>
+                </strong>
+
+                <% if (product.accountType === "pro") { %>
+
+                    <span style="
+                        color:#16a34a;
+                        font-weight:bold;
+                        margin-left:5px;
+                    ">
+                        ⭐ PRO
+                    </span>
+
+                <% } %>
+
+                <p>
+                    Seller:
+                    <%= product.fullname %>
+                </p>
+
+            </div>
+
+            <a
+                href="mailto:<%= product.email %>"
+                class="button"
+            >
+                📩 Contact Seller
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
