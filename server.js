@@ -964,7 +964,7 @@ app.post("/like/:id", (req, res) => {
             }
 
             db.run(
-                "INSERT OR IGNORE INTO likes(userId, inventionId) VALUES(?, ?)",
+                "INSERT INTO likes(userId, inventionId) VALUES(?, ?) ON CONFLICT (userId, inventionId) DO NOTHING",
                 [likerId, inventionId],
                 function(err) {
 
@@ -1290,7 +1290,7 @@ app.post("/follow/:id", (req, res) => {
     }
 
     db.run(
-        "INSERT OR IGNORE INTO followers (followerId, followingId) VALUES (?, ?)",
+        "INSERT INTO followers (followerId, followingId) VALUES (?, ?) ON CONFLICT (followerId, followingId) DO NOTHING",
         [
             req.session.user.id,
             req.params.id
@@ -1491,8 +1491,9 @@ app.post("/bookmark/:id", (req, res) => {
 
     db.run(
         `
-        INSERT OR IGNORE INTO bookmarks (userId, inventionId)
+        INSERT INTO bookmarks (userId, inventionId)
         VALUES (?, ?)
+        ON CONFLICT (userId, inventionId) DO NOTHING
         `,
         [
             req.session.user.id,

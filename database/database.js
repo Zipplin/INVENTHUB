@@ -25,6 +25,52 @@ function normalizeArgs(params, callback) {
     return { params: params || [], callback };
 }
 
+// Postgres lowercases unquoted column names (userId -> userid), but
+// server.js and the EJS views expect the original camelCase names.
+// This maps every lowercased column back to its real camelCase name
+// so the rest of the app doesn't need to change at all.
+const COLUMN_MAP = {
+    accounttype: "accountType",
+    profileimage: "profileImage",
+    ispro: "isPro",
+    proexpiresat: "proExpiresAt",
+    companydescription: "companyDescription",
+    companyname: "companyName",
+    companylogo: "companyLogo",
+    lookingfor: "lookingFor",
+    createdat: "createdAt",
+    userid: "userId",
+    senderid: "senderId",
+    receiverid: "receiverId",
+    inventionid: "inventionId",
+    isread: "isRead",
+    followerid: "followerId",
+    followingid: "followingId",
+    investorid: "investorId",
+    startdate: "startDate",
+    enddate: "endDate",
+    registrationdeadline: "registrationDeadline",
+    registrationurl: "registrationUrl",
+    updatedat: "updatedAt",
+    registerlink: "registerLink",
+    productname: "productName"
+};
+
+function fixRowKeys(row) {
+    if (!row) return row;
+
+    const fixed = {};
+    for (const key in row) {
+        const properKey = COLUMN_MAP[key] || key;
+        fixed[properKey] = row[key];
+    }
+    return fixed;
+}
+
+function fixRowsKeys(rows) {
+    return rows.map(fixRowKeys);
+}
+
 const db = {
 
     // Mimics sqlite3's db.get — returns a single row (or undefined)
@@ -33,7 +79,7 @@ const db = {
 
         pool.query(toPgQuery(sql), args.params)
             .then((result) => {
-                args.callback(null, result.rows[0]);
+                args.callback(null, fixRowKeys(result.rows[0]));
             })
             .catch((err) => {
                 args.callback(err);
@@ -46,7 +92,7 @@ const db = {
 
         pool.query(toPgQuery(sql), args.params)
             .then((result) => {
-                args.callback(null, result.rows);
+                args.callback(null, fixRowsKeys(result.rows));
             })
             .catch((err) => {
                 args.callback(err);
