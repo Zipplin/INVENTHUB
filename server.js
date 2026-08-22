@@ -442,7 +442,7 @@ ON inventions.id = likes.inventionId
 
     
 
-GROUP BY inventions.id
+GROUP BY inventions.id, users.id
 
 ORDER BY inventions.createdAt DESC
 `,
@@ -1451,7 +1451,7 @@ COUNT(DISTINCT likes.id) AS likes
 
         WHERE inventions.id = ?
 
-        GROUP BY inventions.id
+        GROUP BY inventions.id, users.id
         `,
         [req.params.id],
         (err, invention) => {
