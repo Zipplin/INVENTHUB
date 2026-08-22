@@ -56,6 +56,14 @@ if (isProduction) {
 }
 
 const io = new Server(server);
+
+// Make sure the uploads folder exists (it's gitignored, so a fresh
+// deploy or clone won't have it yet)
+const uploadsDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
 // Configure image uploads
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
