@@ -421,7 +421,7 @@ SELECT
     0 AS isFollowing,
 
     (
-        SELECT GROUP_CONCAT(
+        SELECT STRING_AGG(
             comments.comment || '||' || users.fullname,
             '%%%'
         )
