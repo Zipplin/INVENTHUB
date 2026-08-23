@@ -53,7 +53,10 @@ const COLUMN_MAP = {
     registrationurl: "registrationUrl",
     updatedat: "updatedAt",
     registerlink: "registerLink",
-    productname: "productName"
+    productname: "productName",
+    totalinventions: "totalInventions",
+    totallikes: "totalLikes",
+    isfollowing: "isFollowing"
 };
 
 function fixRowKeys(row) {
@@ -82,6 +85,7 @@ const db = {
                 args.callback(null, fixRowKeys(result.rows[0]));
             })
             .catch((err) => {
+                console.error("❌ db.get error:", err.message, "\nQuery:", sql);
                 args.callback(err);
             });
     },
@@ -95,6 +99,7 @@ const db = {
                 args.callback(null, fixRowsKeys(result.rows));
             })
             .catch((err) => {
+                console.error("❌ db.all error:", err.message, "\nQuery:", sql);
                 args.callback(err);
             });
     },
@@ -124,6 +129,7 @@ const db = {
                 }
             })
             .catch((err) => {
+                console.error("❌ db.run error:", err.message, "\nQuery:", query);
                 if (args.callback) {
                     args.callback.call({}, err);
                 }
