@@ -710,38 +710,79 @@ app.post("/delete/:id", (req, res) => {
         [inventionId, userId],
         (getErr, invention) => {
 
-            db.run(
-                "DELETE FROM inventions WHERE id = ? AND userId = ?",
-                [inventionId, userId],
-                async function(err) {
+            // Other tables reference this invention (likes, comments,
+            // bookmarks, interests, messages). Postgres blocks deleting
+            // a row that's still referenced elsewhere, so we clear
+            // those out first.
+            const cleanupQueries = [
+                ["DELETE FROM likes WHERE inventionId = ?", [inventionId]],
+                ["DELETE FROM comments WHERE inventionId = ?", [inventionId]],
+                ["DELETE FROM bookmarks WHERE inventionId = ?", [inventionId]],
+                ["DELETE FROM interests WHERE inventionId = ?", [inventionId]],
+                ["DELETE FROM messages WHERE inventionId = ?", [inventionId]]
+            ];
 
-                    if (err) {
-                        console.log(err.message);
-                        return res.send("❌ Failed to delete invention.");
-                    }
+            function runCleanup(index) {
 
-                    if (this.changes === 0) {
-                        return res.send("❌ You are not allowed to delete this invention.");
-                    }
-
-                    // Also remove the image file itself from storage,
-                    // so it doesn't sit around unused forever.
-                    if (invention && invention.image) {
-                        const { error: storageErr } = await supabase.storage
-                            .from(SUPABASE_BUCKET)
-                            .remove([invention.image]);
-
-                        if (storageErr) {
-                            console.error(
-                                "⚠️ Could not delete image file:",
-                                storageErr.message
-                            );
-                        }
-                    }
-
-                    res.redirect("/my-inventions");
+                if (index >= cleanupQueries.length) {
+                    return deleteInvention();
                 }
-            );
+
+                const [sql, params] = cleanupQueries[index];
+
+                db.run(sql, params, (cleanupErr) => {
+
+                    if (cleanupErr) {
+                        console.error(
+                            "⚠️ Cleanup step failed:",
+                            cleanupErr.message
+                        );
+                    }
+
+                    runCleanup(index + 1);
+
+                });
+
+            }
+
+            function deleteInvention() {
+
+                db.run(
+                    "DELETE FROM inventions WHERE id = ? AND userId = ?",
+                    [inventionId, userId],
+                    async function(err) {
+
+                        if (err) {
+                            console.log(err.message);
+                            return res.send("❌ Failed to delete invention.");
+                        }
+
+                        if (this.changes === 0) {
+                            return res.send("❌ You are not allowed to delete this invention.");
+                        }
+
+                        // Also remove the image file itself from storage,
+                        // so it doesn't sit around unused forever.
+                        if (invention && invention.image) {
+                            const { error: storageErr } = await supabase.storage
+                                .from(SUPABASE_BUCKET)
+                                .remove([invention.image]);
+
+                            if (storageErr) {
+                                console.error(
+                                    "⚠️ Could not delete image file:",
+                                    storageErr.message
+                                );
+                            }
+                        }
+
+                        res.redirect("/my-inventions");
+                    }
+                );
+
+            }
+
+            runCleanup(0);
 
         }
     );
