@@ -10,6 +10,7 @@ const session = require("express-session");
 const http = require("http");
 const https = require("https");
 const { Server } = require("socket.io");
+const { createClient } = require("@supabase/supabase-js");
 
 const app = express();
 
@@ -57,25 +58,76 @@ if (isProduction) {
 
 const io = new Server(server);
 
-// Make sure the uploads folder exists (it's gitignored, so a fresh
-// deploy or clone won't have it yet)
-const uploadsDir = path.join(__dirname, "uploads");
-if (!fs.existsSync(uploadsDir)) {
-    fs.mkdirSync(uploadsDir, { recursive: true });
+// Supabase Storage client — uploaded files (invention photos, profile
+// pictures, product images, company logos) live here instead of on
+// local disk, so they survive restarts/redeploys on Render.
+const supabase = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_KEY
+);
+
+const SUPABASE_BUCKET = "uploads";
+
+// Multer now keeps the file in memory instead of writing to disk —
+// we push it to Supabase Storage ourselves right after.
+const upload = multer({ storage: multer.memoryStorage() });
+
+// Runs after upload.single(...)/upload.fields(...) on any route.
+// Pushes req.file (or each file in req.files) to Supabase Storage,
+// then sets req.file.filename (same as multer's diskStorage used to)
+// so every existing route below needs zero further changes.
+async function pushToSupabase(req, res, next) {
+
+    try {
+
+        const filesToUpload = [];
+
+        if (req.file) {
+            filesToUpload.push(req.file);
+        }
+
+        if (req.files) {
+            const fileList = Array.isArray(req.files)
+                ? req.files
+                : Object.values(req.files).flat();
+            filesToUpload.push(...fileList);
+        }
+
+        for (const file of filesToUpload) {
+            const filename = Date.now() + "-" + file.originalname;
+
+            const { error } = await supabase.storage
+                .from(SUPABASE_BUCKET)
+                .upload(filename, file.buffer, {
+                    contentType: file.mimetype
+                });
+
+            if (error) {
+                console.error("❌ Supabase upload failed:", error.message);
+                return res.status(500).send("Image upload failed.");
+            }
+
+            file.filename = filename;
+        }
+
+        next();
+
+    } catch (err) {
+        console.error("❌ Upload middleware error:", err.message);
+        res.status(500).send("Image upload failed.");
+    }
+
 }
 
-// Configure image uploads
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "uploads/");
-    },
-
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + "-" + file.originalname);
-    }
+// Existing "/uploads/filename" links throughout the app (img tags,
+// stored DB values) keep working unchanged — this just redirects
+// them to the real file on Supabase's public CDN.
+app.get("/uploads/:filename", (req, res) => {
+    const { data } = supabase.storage
+        .from(SUPABASE_BUCKET)
+        .getPublicUrl(req.params.filename);
+    res.redirect(data.publicUrl);
 });
-
-const upload = multer({ storage });
 
 // Tell Express to use EJS
 app.set("view engine", "ejs");
@@ -99,7 +151,6 @@ app.use(session({
 }));
 // Serve static files
 app.use(express.static(__dirname));
-app.use("/uploads", express.static("uploads"));
 // =======================
 // Home Page
 // =======================
@@ -182,7 +233,7 @@ res.redirect("/dashboard");
 // =======================
 // Upload Invention
 // =======================
-app.post("/upload", upload.single("image"), (req, res) => {
+app.post("/upload", upload.single("image"), pushToSupabase, (req, res) => {
     
 
     const {
@@ -241,7 +292,7 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     );
 
 });
-app.post("/upload-profile", upload.single("image"), (req, res) => {
+app.post("/upload-profile", upload.single("image"), pushToSupabase, (req, res) => {
 
     if (!req.session.user) {
         return res.redirect("/login.html");
@@ -276,6 +327,7 @@ app.post("/upload-profile", upload.single("image"), (req, res) => {
 app.post(
     "/marketplace/add",
     upload.single("image"),
+    pushToSupabase,
     (req, res) => {
 
         if (!req.session.user) {
@@ -1997,6 +2049,7 @@ app.get("/marketplace/edit/:id", (req, res) => {
 app.post(
     "/marketplace/edit/:id",
     upload.single("image"),
+    pushToSupabase,
     (req, res) => {
 
         if (!req.session.user) {
@@ -2211,6 +2264,7 @@ app.get("/company-profile", (req, res) => {
 app.post(
     "/company-profile",
     upload.single("companyLogo"),
+    pushToSupabase,
     (req, res) => {
 
         if (!req.session.user) {
