@@ -705,21 +705,44 @@ app.post("/delete/:id", (req, res) => {
     const inventionId = req.params.id;
     const userId = req.session.user.id;
 
-    db.run(
-        "DELETE FROM inventions WHERE id = ? AND userId = ?",
+    db.get(
+        "SELECT image FROM inventions WHERE id = ? AND userId = ?",
         [inventionId, userId],
-        function(err) {
+        (getErr, invention) => {
 
-            if (err) {
-                console.log(err.message);
-                return res.send("❌ Failed to delete invention.");
-            }
+            db.run(
+                "DELETE FROM inventions WHERE id = ? AND userId = ?",
+                [inventionId, userId],
+                async function(err) {
 
-            if (this.changes === 0) {
-                return res.send("❌ You are not allowed to delete this invention.");
-            }
+                    if (err) {
+                        console.log(err.message);
+                        return res.send("❌ Failed to delete invention.");
+                    }
 
-            res.redirect("/my-inventions");
+                    if (this.changes === 0) {
+                        return res.send("❌ You are not allowed to delete this invention.");
+                    }
+
+                    // Also remove the image file itself from storage,
+                    // so it doesn't sit around unused forever.
+                    if (invention && invention.image) {
+                        const { error: storageErr } = await supabase.storage
+                            .from(SUPABASE_BUCKET)
+                            .remove([invention.image]);
+
+                        if (storageErr) {
+                            console.error(
+                                "⚠️ Could not delete image file:",
+                                storageErr.message
+                            );
+                        }
+                    }
+
+                    res.redirect("/my-inventions");
+                }
+            );
+
         }
     );
 
@@ -2157,40 +2180,61 @@ app.post("/marketplace/delete/:id", (req, res) => {
         return res.redirect("/pro");
     }
 
-    db.run(
-        `
-        DELETE FROM marketplace_products
-        WHERE id = ? AND userId = ?
-        `,
-        [
-            req.params.id,
-            req.session.user.id
-        ],
-        function(err) {
+    db.get(
+        "SELECT image FROM marketplace_products WHERE id = ? AND userId = ?",
+        [req.params.id, req.session.user.id],
+        (getErr, product) => {
 
-            if (err) {
-                console.error(
-                    "❌ Failed to delete marketplace product:",
-                    err.message
-                );
+            db.run(
+                `
+                DELETE FROM marketplace_products
+                WHERE id = ? AND userId = ?
+                `,
+                [
+                    req.params.id,
+                    req.session.user.id
+                ],
+                async function(err) {
 
-                return res.send(
-                    "❌ Failed to delete product."
-                );
-            }
+                    if (err) {
+                        console.error(
+                            "❌ Failed to delete marketplace product:",
+                            err.message
+                        );
 
-            if (this.changes === 0) {
-                return res.send(
-                    "❌ Product not found or you are not allowed to delete it."
-                );
-            }
+                        return res.send(
+                            "❌ Failed to delete product."
+                        );
+                    }
 
-            console.log(
-                "✅ Marketplace product deleted:",
-                req.params.id
+                    if (this.changes === 0) {
+                        return res.send(
+                            "❌ Product not found or you are not allowed to delete it."
+                        );
+                    }
+
+                    if (product && product.image) {
+                        const { error: storageErr } = await supabase.storage
+                            .from(SUPABASE_BUCKET)
+                            .remove([product.image]);
+
+                        if (storageErr) {
+                            console.error(
+                                "⚠️ Could not delete product image:",
+                                storageErr.message
+                            );
+                        }
+                    }
+
+                    console.log(
+                        "✅ Marketplace product deleted:",
+                        req.params.id
+                    );
+
+                    res.redirect("/marketplace");
+
+                }
             );
-
-            res.redirect("/marketplace");
 
         }
     );
