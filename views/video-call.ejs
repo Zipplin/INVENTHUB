@@ -174,11 +174,32 @@ socket.emit("join-call", roomId);
         let peerConnection;
 
 
+        // STUN alone only works when both people are reachable
+        // directly (e.g. same WiFi/hotspot). Across real-world
+        // networks (mobile data, strict routers, different states),
+        // a TURN server is required to relay the video when a
+        // direct connection can't be made. Open Relay Project is a
+        // free, public TURN service — no signup needed.
         const configuration = {
 
             iceServers: [
                 {
                     urls: "stun:stun.l.google.com:19302"
+                },
+                {
+                    urls: "turn:openrelay.metered.ca:80",
+                    username: "openrelayproject",
+                    credential: "openrelayproject"
+                },
+                {
+                    urls: "turn:openrelay.metered.ca:443",
+                    username: "openrelayproject",
+                    credential: "openrelayproject"
+                },
+                {
+                    urls: "turn:openrelay.metered.ca:443?transport=tcp",
+                    username: "openrelayproject",
+                    credential: "openrelayproject"
                 }
             ]
 
