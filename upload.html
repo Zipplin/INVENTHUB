@@ -4,70 +4,76 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload Invention - InventHub</title>
+    <!-- Link your main CSS -->
     <link rel="stylesheet" href="style.css">
+    
+    
 </head>
 <body>
 
-<div class="register-container">
+<div class="upload-container">
+    <h1 class="upload-heading">💡 Upload Your Invention</h1>
+    <p class="upload-subheading">Fill in the details to showcase your work to the community.</p>
 
-    <h1>💡 Upload Your Invention</h1>
+    <form class="upload-form" action="/upload" method="POST" enctype="multipart/form-data">
 
-    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="title">Invention Title</label>
+            <input type="text" id="title" name="title" required>
+        </div>
 
-        <label>Invention Title</label>
-        <input type="text" name="title" required>
+        <div class="form-grid form-grid-3">
+            <div class="form-group">
+                <label for="category">Category</label>
+                <input type="text" id="category" name="category" required>
+            </div>
+            <div class="form-group">
+                <label for="industry">Industry</label>
+                <input type="text" id="industry" name="industry" required>
+            </div>
+            <div class="form-group">
+                <label for="country">Country</label>
+                <input type="text" id="country" name="country" required>
+            </div>
+        </div>
 
-        <label>Category</label>
-        <input type="text" name="category" required>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="6" required></textarea>
+        </div>
 
-        <label>Industry</label>
-        <input type="text" name="industry" required>
+        <div class="form-grid form-grid-2">
+            <div class="form-group">
+                <label for="stage">Development Stage</label>
+                <select id="stage" name="stage">
+                    <option>Idea</option>
+                    <option>Prototype</option>
+                    <option>Working Prototype</option>
+                    <option>Tested</option>
+                    <option>Ready for Manufacturing</option>
+                    <option>Patented</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="lookingFor">Looking For</label>
+                <select id="lookingFor" name="lookingFor">
+                    <option>Investor</option>
+                    <option>Company</option>
+                    <option>University</option>
+                </select>
+            </div>
+        </div>
 
-        <label>Country</label>
-        <input type="text" name="country" required>
+        <div class="form-group file-upload-group">
+            <label for="image">Invention Image</label>
+            <input type="file" id="image" name="image" accept="image/*">
+        </div>
 
-        <label>Description</label>
-        <textarea
-            name="description"
-            rows="6"
-            required></textarea>
-
-        <label>Development Stage</label>
-
-        <select name="stage">
-            <option>Idea</option>
-            <option>Prototype</option>
-            <option>Working Prototype</option>
-            <option>Tested</option>
-            <option>Ready for Manufacturing</option>
-            <option>Patented</option>
-        </select>
-
-        <label>Looking For</label>
-
-        <select name="lookingFor">
-            <option>Investor</option>
-            <option>Company</option>
-            <option>University</option>
-        </select>
-
-        <br><br>
-
-        <label>Invention Image</label><br>
-
-        <input
-            type="file"
-            name="image"
-            accept="image/*">
-
-        <br><br>
-
-        <button type="submit">
+        <button type="submit" class="btn btn-primary upload-btn">
             🚀 Publish Invention
         </button>
 
     </form>
-
 </div>
 
 </body>

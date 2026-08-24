@@ -4,20 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>InventHub</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-    <header>
-        <div class="logo">InventHub</div>
+    <header class="public-header">
 
-        <nav>
-    <a href="/">Home</a>
-    <a href="/dashboard">Inventions</a>
-    <a href="/exhibitions">Exhibitions</a>
-    <a href="/interested-investors">Investors</a>
-    <a href="/login.html">Login</a>
-</nav>
+        <a href="/" class="public-logo">💡 InventHub</a>
+
+        <nav class="public-nav">
+            <a href="/">Home</a>
+            <a href="/dashboard">Inventions</a>
+            <a href="/exhibitions">Exhibitions</a>
+            <a href="/interested-investors">Investors</a>
+            <a href="/login.html" class="nav-cta">Login</a>
+        </nav>
+
     </header>
 
     <section class="hero">
@@ -28,31 +30,32 @@
             discover exhibitions, and turn ideas into reality.
         </p>
 
-        <a href="register.html">
-    <button>Join InventHub</button>
-</a>
+        <a href="register.html" class="btn btn-primary">Join InventHub</a>
     </section>
 
-    <section class="features">
+    <section class="feature-grid">
 
-        <div class="card">
-            <h2>💡 Share Ideas</h2>
+        <div class="feature-card">
+            <div class="feature-icon">💡</div>
+            <h2>Share Ideas</h2>
             <p>Upload inventions for the world to see.</p>
         </div>
 
-        <div class="card">
-            <h2>🤝 Find Investors</h2>
+        <div class="feature-card">
+            <div class="feature-icon">🤝</div>
+            <h2>Find Investors</h2>
             <p>Connect with companies and individuals looking to invest.</p>
         </div>
 
-        <div class="card">
-            <h2>🌍 Discover Exhibitions</h2>
+        <div class="feature-card">
+            <div class="feature-icon">🌍</div>
+            <h2>Discover Exhibitions</h2>
             <p>Find exhibitions and competitions near you.</p>
         </div>
 
     </section>
 
-    <footer>
+    <footer class="public-footer">
         <p>© 2026 InventHub. All rights reserved.</p>
     </footer>
 

@@ -495,3 +495,124 @@ body {
         padding-bottom: 90px;
     }
 }
+/* ==================== UPLOAD PAGE ==================== */
+
+.upload-container {
+    max-width: 640px;
+    margin: 60px auto;
+    padding: 40px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+}
+
+.upload-heading {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 26px;
+    text-align: center;
+    margin: 0 0 8px;
+}
+
+.upload-subheading {
+    color: var(--text-muted);
+    font-size: 15px;
+    text-align: center;
+    margin: 0 0 32px;
+}
+
+.upload-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+/* Inputs */
+.form-group input[type="text"],
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px 16px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    outline: none;
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: var(--accent);
+    background: var(--surface);
+}
+
+/* File Input */
+.file-upload-group {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    text-align: center;
+    background: var(--bg);
+    transition: border-color 0.15s ease;
+}
+
+.file-upload-group:hover {
+    border-color: var(--accent);
+}
+
+.file-upload-group input[type="file"] {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+/* Grid Layout for side-by-side inputs */
+.form-grid {
+    display: grid;
+    gap: 16px;
+}
+
+.form-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.form-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* Submit Button */
+.upload-btn {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    .upload-container {
+        padding: 24px;
+        margin: 20px auto;
+    }
+
+    .form-grid-2,
+    .form-grid-3 {
+        grid-template-columns: 1fr;
+    }
+}
