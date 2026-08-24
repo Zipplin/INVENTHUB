@@ -6,28 +6,37 @@
 </head>
 <body>
 
-<div class="register-container">
+<div class="upload-container">
 
-<h1>💬 Message Inventor</h1>
+    <h1 class="upload-heading">💬 Message Inventor</h1>
+    <p class="upload-subheading">Send a message to this inventor</p>
 
-<form action="/send-message" method="POST">
+    <form class="upload-form" action="/send-message" method="POST">
 
-    <input type="hidden" name="receiverId" value="<%= receiverId %>">
-    <input type="hidden" name="inventionId" value="<%= inventionId %>">
+        <!-- Hidden fields remain the same -->
+        <input type="hidden" name="receiverId" value="<%= receiverId %>">
+        <input type="hidden" name="inventionId" value="<%= inventionId %>">
 
-    <textarea
-        name="message"
-        rows="6"
-        placeholder="Write your message..."
-        required></textarea>
+        <div class="form-group">
+            <label for="message">Your Message</label>
+            <textarea
+                id="message"
+                name="message"
+                rows="6"
+                placeholder="Write your message..."
+                required></textarea>
+        </div>
 
-    <br><br>
+        <button type="submit" class="btn btn-primary upload-btn">
+            📨 Send Message
+        </button>
 
-    <button type="submit">
-        Send Message
-    </button>
+    </form>
 
-</form>
+    <!-- Add a nice "Back" button to match your screenshot -->
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="/" class="btn btn-outline">← Back</a>
+    </div>
 
 </div>
 
