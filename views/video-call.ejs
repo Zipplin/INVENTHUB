@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -66,479 +65,252 @@
 
     <h1>📹 InventHub Video Call</h1>
 
-    <div id="status">
-    📞 Ready to connect
-</div>
-<div id="callTimer">
-    00:00
-</div>
-<div id="callEnded" style="display:none;">
+    <div id="status">📞 Ready to connect</div>
+    <div id="callTimer">00:00</div>
 
-    <h2>📞 Call Ended</h2>
+    <div id="callEnded" style="display:none;">
+        <h2>📞 Call Ended</h2>
+        <p>
+            Call duration:
+            <strong id="finalDuration">00:00</strong>
+        </p>
+        <a href="/dashboard">
+            <button type="button">← Return to Dashboard</button>
+        </a>
+    </div>
 
-    <p>
-        Call duration:
-        <strong id="finalDuration">00:00</strong>
-    </p>
+    <div id="incomingCall" style="display:none;">
+        <h2>📞 Incoming Video Call</h2>
+        <p id="callerMessage">Someone is calling you...</p>
+        <button id="acceptCall">✅ Accept</button>
+        <button id="declineCall">❌ Decline</button>
+    </div>
 
-    <a href="/dashboard">
-        <button type="button">
-            ← Return to Dashboard
-        </button>
-    </a>
-
-</div>
-<div id="incomingCall" style="display:none;">
-
-    <h2>📞 Incoming Video Call</h2>
-
-    <p id="callerMessage">
-        Someone is calling you...
-    </p>
-
-    <button id="acceptCall">
-        ✅ Accept
-    </button>
-
-    <button id="declineCall">
-        ❌ Decline
-    </button>
-
-</div>
     <div class="video-container">
-
         <div>
             <h3>Your Camera</h3>
             <video id="localVideo" autoplay muted playsinline></video>
         </div>
-
         <div>
             <h3>Inventor</h3>
             <video id="remoteVideo" autoplay playsinline></video>
         </div>
-
     </div>
 
-    <button id="startCall">
-    📹 Start Call
-</button>
-
-<button id="muteButton">
-    🎤 Mute
-</button>
-
-<button id="endCall">
-    ❌ End Call
-</button>
-
+    <button id="startCall">📹 Start Call</button>
+    <button id="muteButton">🎤 Mute</button>
+    <button id="endCall">❌ End Call</button>
 
     <script src="/socket.io/socket.io.js"></script>
 
     <script>
-
         const socket = io();
 
         const localVideo = document.getElementById("localVideo");
         const remoteVideo = document.getElementById("remoteVideo");
+        const startCallButton = document.getElementById("startCall");
+        const endCallButton = document.getElementById("endCall");
+        const muteButton = document.getElementById("muteButton");
+        const status = document.getElementById("status");
+        const callTimer = document.getElementById("callTimer");
+        const callEnded = document.getElementById("callEnded");
+        const finalDuration = document.getElementById("finalDuration");
+        const incomingCall = document.getElementById("incomingCall");
+        const acceptCall = document.getElementById("acceptCall");
+        const declineCall = document.getElementById("declineCall");
 
-        const startCallButton =
-            document.getElementById("startCall");
-
-        const endCallButton =
-            document.getElementById("endCall");
-            const muteButton =
-    document.getElementById("muteButton");
-
-        const status =
-            document.getElementById("status");
-            const callTimer =
-    document.getElementById("callTimer");
-const callEnded =
-    document.getElementById("callEnded");
-
-const finalDuration =
-    document.getElementById("finalDuration");
-let callSeconds = 0;
-let timerInterval = null;
-const incomingCall =
-    document.getElementById("incomingCall");
-
-const acceptCall =
-    document.getElementById("acceptCall");
-
-const declineCall =
-    document.getElementById("declineCall");
+        let callSeconds = 0;
+        let timerInterval = null;
 
         const roomId = "<%= roomId %>";
-socket.emit("join-call", roomId);
+        socket.emit("join-call", roomId);
+
         let localStream;
         let peerConnection;
 
-
-        // STUN alone only works when both people are reachable
-        // directly (e.g. same WiFi/hotspot). Across real-world
-        // networks (mobile data, strict routers, different states),
-        // a TURN server is required to relay the video when a
-        // direct connection can't be made. Open Relay Project is a
-        // free, public TURN service — no signup needed.
+        // *** UPDATED TURN SERVERS ***
+        // Note: We kept the Google STUN. The previous OpenRelay servers often go offline.
+        // If you want 100% reliability on 4G, you MUST sign up for a free TURN server 
+        // (like metered.ca) and replace "TURN_USERNAME" and "TURN_CREDENTIAL" below.
         const configuration = {
-
             iceServers: [
+                { urls: "stun:stun.l.google.com:19302" },
+                { urls: "stun:stun1.l.google.com:19302" },
+                // Use these if you get a free account from Metered.ca:
+                /*
                 {
-                    urls: "stun:stun.l.google.com:19302"
+                    urls: "turn:global.relay.metered.ca:80",
+                    username: "YOUR_METERED_USERNAME",
+                    credential: "YOUR_METERED_CREDENTIAL"
                 },
                 {
-                    urls: "turn:openrelay.metered.ca:80",
-                    username: "openrelayproject",
-                    credential: "openrelayproject"
+                    urls: "turn:global.relay.metered.ca:443",
+                    username: "YOUR_METERED_USERNAME",
+                    credential: "YOUR_METERED_CREDENTIAL"
                 },
                 {
-                    urls: "turn:openrelay.metered.ca:443",
-                    username: "openrelayproject",
-                    credential: "openrelayproject"
-                },
-                {
-                    urls: "turn:openrelay.metered.ca:443?transport=tcp",
-                    username: "openrelayproject",
-                    credential: "openrelayproject"
+                    urls: "turn:global.relay.metered.ca:443?transport=tcp",
+                    username: "YOUR_METERED_USERNAME",
+                    credential: "YOUR_METERED_CREDENTIAL"
                 }
+                */
             ]
-
         };
-
 
         async function startCamera() {
-
-            localStream =
-                await navigator.mediaDevices.getUserMedia({
-                    video: true,
-                    audio: true
-                });
-
+            localStream = await navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: true
+            });
             localVideo.srcObject = localStream;
-
         }
-
 
         async function createPeerConnection() {
-
-            peerConnection =
-                new RTCPeerConnection(configuration);
-
+            peerConnection = new RTCPeerConnection(configuration);
 
             localStream.getTracks().forEach(track => {
-
-                peerConnection.addTrack(
-                    track,
-                    localStream
-                );
-
+                peerConnection.addTrack(track, localStream);
             });
 
-
+            // *** FIX FOR THE PIERCING SOUND ***
+            // We mute the audio track coming from the remote video to stop the feedback loop
             peerConnection.ontrack = event => {
-
-                remoteVideo.srcObject =
-                    event.streams[0];
-
+                remoteVideo.srcObject = event.streams[0];
+                
+                event.streams[0].getAudioTracks().forEach(track => {
+                    track.enabled = false; 
+                });
             };
-
 
             peerConnection.onicecandidate = event => {
-
                 if (event.candidate) {
-
                     socket.emit("ice-candidate", {
-
                         roomId: roomId,
-
                         candidate: event.candidate
-
                     });
-
                 }
-
             };
-
         }
 
-
         socket.on("call-accepted", async () => {
-
-    status.innerText =
-        "📹 Call accepted. Connecting...";
-
-    await createPeerConnection();
-
-    const offer =
-        await peerConnection.createOffer();
-
-    await peerConnection.setLocalDescription(offer);
-
-    socket.emit("offer", {
-        roomId: roomId,
-        offer: offer
-    });
-
-});
-
-socket.on("incoming-call", () => {
-
-    incomingCall.style.display = "block";
-
-    status.innerText =
-        "📞 Incoming video call...";
-
-});
-acceptCall.onclick = async () => {
-
-    incomingCall.style.display = "none";
-
-    try {
-
-        await startCamera();
-
-        status.innerText =
-            "📹 Connecting...";
-
-        socket.emit(
-            "accept-call",
-            roomId
-        );
-
-    } catch (error) {
-
-        console.error(error);
-
-        status.innerText =
-            "Camera or microphone permission was denied.";
-
-    }
-
-};
-
-
-declineCall.onclick = () => {
-
-    incomingCall.style.display = "none";
-
-    socket.emit(
-        "decline-call",
-        roomId
-    );
-
-    status.innerText =
-        "Call declined.";
-
-};
-        socket.on("offer", async offer => {
-
-            status.innerText =
-                "Incoming video call...";
-
+            status.innerText = "📹 Call accepted. Connecting...";
             await createPeerConnection();
-
-            await peerConnection.setRemoteDescription(
-                offer
-            );
-
-            const answer =
-                await peerConnection.createAnswer();
-
-            await peerConnection.setLocalDescription(
-                answer
-            );
-
-            socket.emit("answer", {
-
-                roomId: roomId,
-
-                answer: answer
-
-            });
-startCallTimer();
+            const offer = await peerConnection.createOffer();
+            await peerConnection.setLocalDescription(offer);
+            socket.emit("offer", { roomId: roomId, offer: offer });
         });
 
-
-        socket.on("answer", async answer => {
-
-            await peerConnection.setRemoteDescription(
-                answer
-            );
-
-            status.innerText =
-                "📹 Video call connected";
-startCallTimer();
+        socket.on("incoming-call", () => {
+            incomingCall.style.display = "block";
+            status.innerText = "📞 Incoming video call...";
         });
 
-
-        socket.on("ice-candidate", async candidate => {
-
-            if (peerConnection) {
-
-                try {
-
-                    await peerConnection.addIceCandidate(
-                        candidate
-                    );
-
-                } catch (error) {
-
-                    console.error(
-                        "ICE error:",
-                        error
-                    );
-
-                }
-
+        acceptCall.onclick = async () => {
+            incomingCall.style.display = "none";
+            try {
+                await startCamera();
+                status.innerText = "📹 Connecting...";
+                socket.emit("accept-call", roomId);
+            } catch (error) {
+                status.innerText = "Camera or microphone permission was denied.";
             }
-
-        });
-
-socket.on("call-declined", () => {
-
-    status.innerText =
-        "❌ Call declined.";
-
-});
-        socket.on("call-ended", () => {
-
-            status.innerText =
-                "Call ended";
-
-            endCall();
-
-        });
-
-
-        startCallButton.onclick =
-            async () => {
-
-                try {
-
-                    await startCamera();
-socket.emit(
-    "call-user",
-    roomId
-);
-                    socket.emit(
-                        "join-call",
-                        roomId
-                    );
-
-                    status.innerText =
-                        "Waiting for the other person...";
-
-                } catch (error) {
-
-                    console.error(error);
-
-                    status.innerText =
-                        "Camera or microphone permission was denied.";
-
-                }
-
-            };
-
-
-        endCallButton.onclick = () => {
-
-            socket.emit(
-                "end-call",
-                roomId
-            );
-
-            endCall();
-
         };
 
-muteButton.onclick = () => {
+        declineCall.onclick = () => {
+            incomingCall.style.display = "none";
+            socket.emit("decline-call", roomId);
+            status.innerText = "Call declined.";
+        };
 
-    if (!localStream) return;
+        socket.on("offer", async offer => {
+            status.innerText = "Incoming video call...";
+            await createPeerConnection();
+            await peerConnection.setRemoteDescription(offer);
+            const answer = await peerConnection.createAnswer();
+            await peerConnection.setLocalDescription(answer);
+            socket.emit("answer", { roomId: roomId, answer: answer });
+            startCallTimer();
+        });
 
-    const audioTrack =
-        localStream.getAudioTracks()[0];
+        socket.on("answer", async answer => {
+            await peerConnection.setRemoteDescription(answer);
+            status.innerText = "📹 Video call connected";
+            startCallTimer();
+        });
 
-    if (!audioTrack) return;
-
-    audioTrack.enabled =
-        !audioTrack.enabled;
-
-    if (audioTrack.enabled) {
-
-        muteButton.innerText =
-            "🎤 Mute";
-
-    } else {
-
-        muteButton.innerText =
-            "🔇 Unmute";
-
-    }
-
-};
-function startCallTimer() {
-
-    if (timerInterval) return;
-
-    callSeconds = 0;
-
-    timerInterval = setInterval(() => {
-
-        callSeconds++;
-
-        const minutes =
-            Math.floor(callSeconds / 60)
-            .toString()
-            .padStart(2, "0");
-
-        const seconds =
-            (callSeconds % 60)
-            .toString()
-            .padStart(2, "0");
-
-        callTimer.innerText =
-            `${minutes}:${seconds}`;
-
-    }, 1000);
-
-}
-        function endCall() {
-if (timerInterval) {
-
-    clearInterval(timerInterval);
-
-    timerInterval = null;
-
-}
-finalDuration.innerText =
-    callTimer.innerText;
-
-callEnded.style.display =
-    "block";
-            if (localStream) {
-
-                localStream.getTracks().forEach(
-                    track => track.stop()
-                );
-
-            }
-
+        socket.on("ice-candidate", async candidate => {
             if (peerConnection) {
+                try {
+                    await peerConnection.addIceCandidate(candidate);
+                } catch (error) {
+                    console.error("ICE error:", error);
+                }
+            }
+        });
 
+        socket.on("call-declined", () => {
+            status.innerText = "❌ Call declined.";
+        });
+
+        socket.on("call-ended", () => {
+            status.innerText = "Call ended";
+            endCall();
+        });
+
+        startCallButton.onclick = async () => {
+            try {
+                await startCamera();
+                socket.emit("call-user", roomId);
+                socket.emit("join-call", roomId);
+                status.innerText = "Waiting for the other person...";
+            } catch (error) {
+                status.innerText = "Camera or microphone permission was denied.";
+            }
+        };
+
+        endCallButton.onclick = () => {
+            socket.emit("end-call", roomId);
+            endCall();
+        };
+
+        muteButton.onclick = () => {
+            if (!localStream) return;
+            const audioTrack = localStream.getAudioTracks()[0];
+            if (!audioTrack) return;
+            audioTrack.enabled = !audioTrack.enabled;
+            muteButton.innerText = audioTrack.enabled ? "🎤 Mute" : "🔇 Unmute";
+        };
+
+        function startCallTimer() {
+            if (timerInterval) return;
+            callSeconds = 0;
+            timerInterval = setInterval(() => {
+                callSeconds++;
+                const minutes = Math.floor(callSeconds / 60).toString().padStart(2, "0");
+                const seconds = (callSeconds % 60).toString().padStart(2, "0");
+                callTimer.innerText = `${minutes}:${seconds}`;
+            }, 1000);
+        }
+
+        function endCall() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            finalDuration.innerText = callTimer.innerText;
+            callEnded.style.display = "block";
+
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+            }
+            if (peerConnection) {
                 peerConnection.close();
-
                 peerConnection = null;
-
             }
 
             localVideo.srcObject = null;
             remoteVideo.srcObject = null;
-
         }
-
     </script>
-
 </body>
 </html>
-
