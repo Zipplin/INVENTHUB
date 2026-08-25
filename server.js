@@ -1812,9 +1812,6 @@ socket.on("decline-call", (roomId) => {
 
 
 // =======================
-// Start InventHub
-// =======================
-// =======================
 // Video Call Page
 // =======================
 
@@ -1843,75 +1840,6 @@ app.get("/video-call/:roomId", (req, res) => {
 
     res.render("video-call", {
         roomId: req.params.roomId
-    });
-
-});
-// =======================
-// Video Call Signaling
-// =======================
-
-io.on("connection", (socket) => {
-
-    console.log("📞 Video call socket connected:", socket.id);
-
-    // User joins a video-call room
-    socket.on("join-call", (roomId) => {
-
-        socket.join(roomId);
-
-        console.log(
-            `📞 ${socket.id} joined call room: ${roomId}`
-        );
-
-        // Tell the other person that someone joined
-        socket.to(roomId).emit("user-joined");
-
-    });
-
-
-    // Send WebRTC offer
-    socket.on("offer", ({ roomId, offer }) => {
-
-        socket.to(roomId).emit("offer", offer);
-
-    });
-
-
-    // Send WebRTC answer
-    socket.on("answer", ({ roomId, answer }) => {
-
-        socket.to(roomId).emit("answer", answer);
-
-    });
-
-
-    // Send ICE candidate
-    socket.on("ice-candidate", ({ roomId, candidate }) => {
-
-        socket.to(roomId).emit(
-            "ice-candidate",
-            candidate
-        );
-
-    });
-
-
-    // End call
-    socket.on("end-call", (roomId) => {
-
-        socket.to(roomId).emit("call-ended");
-
-    });
-
-
-    // User disconnects
-    socket.on("disconnect", () => {
-
-        console.log(
-            "📞 Video call socket disconnected:",
-            socket.id
-        );
-
     });
 
 });

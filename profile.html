@@ -1,26 +1,60 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload Profile Picture</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-<div class="register-container">
+<div class="app-shell">
 
-<h2>Upload Profile Picture</h2>
+    <aside class="sidebar">
 
-<form action="/upload-profile" method="POST" enctype="multipart/form-data">
+        <div class="sidebar-logo">💡 InventHub</div>
 
-<input type="file" name="image" required>
+        <nav class="sidebar-nav">
+            <a href="/dashboard">🏠 Dashboard</a>
+            <a href="/my-inventions">💡 My Inventions</a>
+            <a href="/exhibitions">🏆 Exhibitions</a>
+            <a href="/marketplace">🛒 Marketplace</a>
+            <a href="/bookmarks">⭐ Bookmarks</a>
+            <a href="/conversations">💬 Messages</a>
+            <a href="/notifications">🔔 Notifications</a>
+        </nav>
 
-<br><br>
+        <div class="sidebar-bottom">
+            <a href="/upload.html">➕ Upload Invention</a>
+            <a href="/logout">🚪 Logout</a>
+        </div>
 
-<button type="submit">
-Upload
-</button>
+    </aside>
 
-</form>
+    <main class="main">
+
+        <div class="feed-card" style="max-width: 420px; margin: 60px auto; padding: 36px;">
+
+            <h1 class="page-heading" style="text-align:center;">Update Profile Picture</h1>
+            <p class="page-subheading" style="text-align:center; margin-bottom: 24px;">
+                Choose a clear photo — this is how others will recognize you.
+            </p>
+
+            <form action="/upload-profile" method="POST" enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <input type="file" name="image" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width:100%;">
+                    Upload
+                </button>
+
+            </form>
+
+        </div>
+
+    </main>
 
 </div>
 
