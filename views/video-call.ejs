@@ -132,18 +132,18 @@
         // Note: We kept the Google STUN. The previous OpenRelay servers often go offline.
         // If you want 100% reliability on 4G, you MUST sign up for a free TURN server 
         // (like metered.ca) and replace "TURN_USERNAME" and "TURN_CREDENTIAL" below.
-      const configuration = {
+     const configuration = {
     iceServers: [
         { urls: "stun:stun.l.google.com:19302" },
         {
-            urls: "turns:turn.cloudflare.com:5349?transport=tcp", 
-            username: "openrelayproject", 
-            credential: "openrelayproject"
+            urls: "turns:inventhub.metered.live:5349?transport=tcp",
+            username: "inventhub.metered.live",
+            credential: "Xc5KFLIfivqZMS0dV6yYvLJlv3MqLAh0ZkeiGjHT6eyVg"
         },
         {
-            urls: "turns:turn.cloudflare.com:5349",
-            username: "openrelayproject",
-            credential: "openrelayproject"
+            urls: "turns:inventhub.metered.live:5349",
+            username: "inventhub.metered.live",
+            credential: "Xc5KFLIfivqZMS0dV6yYvLJlv3MqLAh0ZkeiGjHT6eyVg"
         }
     ]
 };
