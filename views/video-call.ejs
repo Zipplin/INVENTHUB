@@ -132,21 +132,34 @@
         // Note: We kept the Google STUN. The previous OpenRelay servers often go offline.
         // If you want 100% reliability on 4G, you MUST sign up for a free TURN server 
         // (like metered.ca) and replace "TURN_USERNAME" and "TURN_CREDENTIAL" below.
-     const configuration = {
-    iceServers: [
-        { urls: "stun:stun.l.google.com:19302" },
-        {
-            urls: "turns:inventhub.metered.live:5349?transport=tcp",
-            username:  "6556dbe680bc7807a6c50df9",
-            credential: "3CkOqh2Odvo8jjne"
-        },
-        {
-            urls: "turns:inventhub.metered.live:5349",
-            username: "6556dbe680bc7807a6c50df9",
-            credential: "3CkOqh2Odvo8jjne"
-        }
-    ]
-};
+    var myPeerConnection = new RTCPeerConnection({
+  iceServers: [
+      {
+        urls: "stun:stun.relay.metered.ca:80",
+      },
+      {
+        urls: "turn:global.relay.metered.ca:80",
+        username: "6556dbe680bc7807a6c50df9",
+        credential: "3CkOqh2Odvo8jjne",
+      },
+      {
+        urls: "turn:global.relay.metered.ca:80?transport=tcp",
+        username: "6556dbe680bc7807a6c50df9",
+        credential: "3CkOqh2Odvo8jjne",
+      },
+      {
+        urls: "turn:global.relay.metered.ca:443",
+        username: "6556dbe680bc7807a6c50df9",
+        credential: "3CkOqh2Odvo8jjne",
+      },
+      {
+        urls: "turns:global.relay.metered.ca:443?transport=tcp",
+        username: "6556dbe680bc7807a6c50df9",
+        credential: "3CkOqh2Odvo8jjne",
+      },
+  ],
+});
+                      
         async function startCamera() {
             localStream = await navigator.mediaDevices.getUserMedia({
                 video: true,
