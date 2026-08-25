@@ -133,30 +133,29 @@
         // If you want 100% reliability on 4G, you MUST sign up for a free TURN server 
         // (like metered.ca) and replace "TURN_USERNAME" and "TURN_CREDENTIAL" below.
         const configuration = {
-            iceServers: [
-                { urls: "stun:stun.l.google.com:19302" },
-                { urls: "stun:stun1.l.google.com:19302" },
-                // Use these if you get a free account from Metered.ca:
-                /*
-                {
-                    urls: "turn:global.relay.metered.ca:80",
-                    username: "YOUR_METERED_USERNAME",
-                    credential: "YOUR_METERED_CREDENTIAL"
-                },
-                {
-                    urls: "turn:global.relay.metered.ca:443",
-                    username: "YOUR_METERED_USERNAME",
-                    credential: "YOUR_METERED_CREDENTIAL"
-                },
-                {
-                    urls: "turn:global.relay.metered.ca:443?transport=tcp",
-                    username: "YOUR_METERED_USERNAME",
-                    credential: "YOUR_METERED_CREDENTIAL"
-                }
-                */
-            ]
-        };
 
+    iceServers: [
+        {
+            urls: "stun:stun.l.google.com:19302"
+        },
+        {
+            urls: "turn:YOUR_DOMAIN_HERE:443?transport=tcp",
+            username: "inventhub.metered.live",
+            credential: "Xc5KFLlfivqZMS0dVs6yYvLJlvg3MqLAh0ZkeiGjHTt6eyVg"
+        },
+        {
+            urls: "turn:YOUR_DOMAIN_HERE:443",
+            username: "inventhub.metered.live",
+            credential: "Xc5KFLlfivqZMS0dVs6yYvLJlvg3MqLAh0ZkeiGjHTt6eyVg"
+        },
+        {
+            urls: "turn:YOUR_DOMAIN_HERE:80",
+            username: "inventhub.metered.live",
+            credential: "Xc5KFLlfivqZMS0dVs6yYvLJlvg3MqLAh0ZkeiGjHTt6eyVg"
+        }
+    ]
+
+};
         async function startCamera() {
             localStream = await navigator.mediaDevices.getUserMedia({
                 video: true,
