@@ -1,72 +1,76 @@
 <!DOCTYPE html>
 <html>
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>My Followers - InventHub</title>
-
     <link rel="stylesheet" href="/css/style.css">
-
 </head>
-
 <body>
 
-<div class="container">
+<div class="app-shell">
 
-    <h1>👥 My Followers</h1>
+    <aside class="sidebar">
 
-    <p>People following <strong><%= fullname %></strong></p>
+        <div class="sidebar-logo">💡 InventHub</div>
 
-    <hr>
+        <nav class="sidebar-nav">
+            <a href="/dashboard">🏠 Dashboard</a>
+            <a href="/my-inventions">💡 My Inventions</a>
+            <a href="/exhibitions">🏆 Exhibitions</a>
+            <a href="/marketplace">🛒 Marketplace</a>
+            <a href="/bookmarks">⭐ Bookmarks</a>
+            <a href="/conversations">💬 Messages</a>
+            <a href="/notifications">🔔 Notifications</a>
+        </nav>
 
-    <% if (followers.length === 0) { %>
-
-        <div class="card">
-            <h2>No followers yet</h2>
-            <p>When people follow you, they will appear here.</p>
+        <div class="sidebar-bottom">
+            <a href="/upload.html">➕ Upload Invention</a>
+            <a href="/logout">🚪 Logout</a>
         </div>
 
-    <% } else { %>
+    </aside>
 
-        <% followers.forEach(follower => { %>
+    <main class="main">
 
-            <div class="card">
+        <h1 class="page-heading">👥 My Followers</h1>
+        <p class="page-subheading">People following <strong><%= fullname %></strong></p>
 
-                <p>
-                    <strong><%= follower.fullname %></strong>
+        <% if (followers.length === 0) { %>
+
+            <div class="feed-card" style="padding: 40px 20px; text-align:center;">
+                <p style="color:var(--text-muted); margin:0;">
+                    No followers yet. When people follow you, they'll appear here.
                 </p>
-
-                <% if (follower.profileImage) { %>
-
-                    <img
-                        src="/uploads/<%= follower.profileImage %>"
-                        class="profile-pic"
-                        width="60"
-                        height="60"
-                    >
-
-                <% } %>
-
-                <br>
-
-                <a href="/inventor/<%= follower.id %>">
-                    <button>View Profile</button>
-                </a>
-
             </div>
 
-        <% }) %>
+        <% } else { %>
 
-    <% } %>
+            <% followers.forEach(follower => { %>
 
-    <br>
+                <div class="feed-card feed-card-header" style="padding: 16px; align-items:center;">
 
-    <a href="/dashboard">
-        ← Back to Dashboard
-    </a>
+                    <% if (follower.profileImage) { %>
+                        <img src="/uploads/<%= follower.profileImage %>" class="avatar" alt="<%= follower.fullname %>">
+                    <% } else { %>
+                        <img src="https://ui-avatars.com/api/?name=<%= encodeURIComponent(follower.fullname) %>&background=EEF2FF&color=4F46E5" class="avatar" alt="<%= follower.fullname %>">
+                    <% } %>
+
+                    <div class="feed-card-header-info" style="flex:1;">
+                        <span class="inventor-name"><%= follower.fullname %></span>
+                    </div>
+
+                    <a href="/inventor/<%= follower.id %>" class="btn btn-outline" style="padding: 8px 16px; font-size:13px;">
+                        View Profile
+                    </a>
+
+                </div>
+
+            <% }) %>
+
+        <% } %>
+
+    </main>
 
 </div>
 

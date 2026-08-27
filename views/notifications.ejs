@@ -1,44 +1,80 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notifications</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-<div class="register-container">
+<div class="app-shell">
 
-<h1>🔔 Notifications</h1>
+    <aside class="sidebar">
 
-<% if (notifications.length === 0) { %>
+        <div class="sidebar-logo">💡 InventHub</div>
 
-<p>You have no notifications.</p>
+        <nav class="sidebar-nav">
+            <a href="/dashboard">🏠 Dashboard</a>
+            <a href="/my-inventions">💡 My Inventions</a>
+            <a href="/exhibitions">🏆 Exhibitions</a>
+            <a href="/marketplace">🛒 Marketplace</a>
+            <a href="/bookmarks">⭐ Bookmarks</a>
+            <a href="/conversations">💬 Messages</a>
+            <a href="/notifications" class="active">🔔 Notifications</a>
+        </nav>
 
-<% } else { %>
+        <div class="sidebar-bottom">
+            <a href="/upload.html">➕ Upload Invention</a>
+            <a href="/logout">🚪 Logout</a>
+        </div>
 
-    <% notifications.forEach(function(notification){ %>
+    </aside>
 
-<div
-    style="border:1px solid #ddd;padding:15px;margin-bottom:15px;border-radius:10px;background:<%= notification.isRead ? '#ffffff' : '#e8f4ff' %>;"
->
+    <main class="main">
 
-    <p><%= notification.message %></p>
+        <h1 class="page-heading">🔔 Notifications</h1>
 
-    <small><%= notification.createdAt %></small>
+        <% if (notifications.length === 0) { %>
 
-    <% if(notification.link){ %>
-        <br><br>
-        <a href="<%= notification.link %>">View</a>
-    <% } %>
+            <div class="feed-card" style="padding: 40px 20px; text-align:center;">
+                <p style="color:var(--text-muted); margin:0;">
+                    You have no notifications.
+                </p>
+            </div>
 
-</div>
+        <% } else { %>
 
-<% }) %>
-<% } %>
+            <% notifications.forEach(function(notification) { %>
 
-<br>
+                <div
+                    class="feed-card"
+                    style="padding:16px 18px; <%= notification.isRead ? '' : 'border-color: var(--accent); background: var(--accent-soft);' %>"
+                >
 
-<a href="/dashboard">← Back to Dashboard</a>
+                    <p style="margin:0 0 6px; font-size:14px; color:var(--text);">
+                        <%= notification.message %>
+                    </p>
+
+                    <span style="font-size:12px; color:var(--text-muted);">
+                        <%= notification.createdAt %>
+                    </span>
+
+                    <% if (notification.link) { %>
+                        <div style="margin-top:10px;">
+                            <a href="<%= notification.link %>" class="btn btn-outline" style="padding: 6px 14px; font-size:13px;">
+                                View
+                            </a>
+                        </div>
+                    <% } %>
+
+                </div>
+
+            <% }) %>
+
+        <% } %>
+
+    </main>
 
 </div>
 

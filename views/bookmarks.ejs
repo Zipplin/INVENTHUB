@@ -1,47 +1,89 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saved Inventions</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-<h2>⭐ Saved Inventions</h2>
+<div class="app-shell">
 
-<a href="/dashboard">← Back to Dashboard</a>
+    <aside class="sidebar">
 
-<hr>
+        <div class="sidebar-logo">💡 InventHub</div>
 
-<% if (bookmarks.length === 0) { %>
+        <nav class="sidebar-nav">
+            <a href="/dashboard">🏠 Dashboard</a>
+            <a href="/my-inventions">💡 My Inventions</a>
+            <a href="/exhibitions">🏆 Exhibitions</a>
+            <a href="/marketplace">🛒 Marketplace</a>
+            <a href="/bookmarks" class="active">⭐ Bookmarks</a>
+            <a href="/conversations">💬 Messages</a>
+            <a href="/notifications">🔔 Notifications</a>
+        </nav>
 
-    <p>You haven't saved any inventions yet.</p>
-
-<% } else { %>
-
-    <% bookmarks.forEach(item => { %>
-
-        <div style="border:1px solid #ccc; padding:15px; margin-bottom:15px;">
-
-            <h3><%= item.title %></h3>
-
-            <p><strong>Inventor:</strong> <%= item.fullname %></p>
-
-            <p><%= item.description %></p>
-
-            <a href="/invention/<%= item.id %>">
-                <button>📄 View Details</button>
-            </a>
-
-            <form action="/remove-bookmark/<%= item.id %>" method="POST">
-                <button type="submit">
-                    ❌ Remove Bookmark
-                </button>
-            </form>
-
+        <div class="sidebar-bottom">
+            <a href="/upload.html">➕ Upload Invention</a>
+            <a href="/logout">🚪 Logout</a>
         </div>
 
-    <% }) %>
+    </aside>
 
-<% } %>
+    <main class="main">
+
+        <h1 class="page-heading">⭐ Saved Inventions</h1>
+
+        <% if (bookmarks.length === 0) { %>
+
+            <div class="feed-card" style="padding: 40px 20px; text-align:center;">
+                <p style="color:var(--text-muted); margin:0;">
+                    You haven't saved any inventions yet.
+                </p>
+            </div>
+
+        <% } else { %>
+
+            <% bookmarks.forEach(item => { %>
+
+                <div class="feed-card">
+
+                    <div class="feed-card-body">
+
+                        <h2 class="invention-title"><%= item.title %></h2>
+
+                        <div class="meta-row">
+                            <span>Inventor: <%= item.fullname %></span>
+                        </div>
+
+                        <p class="invention-description"><%= item.description %></p>
+
+                        <div class="action-bar">
+
+                            <a href="/invention/<%= item.id %>" class="btn btn-outline">
+                                📄 View Details
+                            </a>
+
+                            <form action="/remove-bookmark/<%= item.id %>" method="POST" style="display:inline;">
+                                <button type="submit" class="btn btn-danger">
+                                    ❌ Remove Bookmark
+                                </button>
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            <% }) %>
+
+        <% } %>
+
+    </main>
+
+</div>
 
 </body>
 </html>

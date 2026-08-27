@@ -1,42 +1,79 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conversations</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-<div class="register-container">
+<div class="app-shell">
 
-<h1>💬 Conversations</h1>
+    <aside class="sidebar">
 
-<% if(conversations.length === 0){ %>
+        <div class="sidebar-logo">💡 InventHub</div>
 
-<p>No conversations yet.</p>
+        <nav class="sidebar-nav">
+            <a href="/dashboard">🏠 Dashboard</a>
+            <a href="/my-inventions">💡 My Inventions</a>
+            <a href="/exhibitions">🏆 Exhibitions</a>
+            <a href="/marketplace">🛒 Marketplace</a>
+            <a href="/bookmarks">⭐ Bookmarks</a>
+            <a href="/conversations" class="active">💬 Messages</a>
+            <a href="/notifications">🔔 Notifications</a>
+        </nav>
 
-<% } else { %>
+        <div class="sidebar-bottom">
+            <a href="/upload.html">➕ Upload Invention</a>
+            <a href="/logout">🚪 Logout</a>
+        </div>
 
-<% conversations.forEach(function(person){ %>
+    </aside>
 
-<div style="border:1px solid #ddd;padding:15px;margin-bottom:15px;border-radius:10px;">
+    <main class="main">
 
-<h3><%= person.fullname %></h3>
+        <h1 class="page-heading">💬 Conversations</h1>
 
-<p><%= person.email %></p>
+        <% if (conversations.length === 0) { %>
 
-<a href="/chat/<%= person.id %>">
-Open Chat →
-</a>
+            <div class="feed-card" style="padding: 40px 20px; text-align:center;">
+                <p style="color:var(--text-muted); margin:0;">
+                    No conversations yet.
+                </p>
+            </div>
 
-</div>
+        <% } else { %>
 
-<% }) %>
+            <% conversations.forEach(function(person) { %>
 
-<% } %>
+                <a href="/chat/<%= person.id %>" style="text-decoration:none;">
 
-<br>
+                    <div class="feed-card feed-card-header" style="padding: 16px; align-items:center;">
 
-<a href="/dashboard">← Back to Dashboard</a>
+                        <img
+                            src="https://ui-avatars.com/api/?name=<%= encodeURIComponent(person.fullname) %>&background=EEF2FF&color=4F46E5"
+                            class="avatar"
+                            alt="<%= person.fullname %>">
+
+                        <div class="feed-card-header-info" style="flex:1;">
+                            <span class="inventor-name"><%= person.fullname %></span>
+                            <span style="font-size:13px; color:var(--text-muted);"><%= person.email %></span>
+                        </div>
+
+                        <span style="color:var(--accent); font-weight:600; font-size:13px;">
+                            Open Chat →
+                        </span>
+
+                    </div>
+
+                </a>
+
+            <% }) %>
+
+        <% } %>
+
+    </main>
 
 </div>
 
