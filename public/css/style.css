@@ -42,7 +42,7 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* ==================== LAYOUT ==================== */
+/* ==================== APP LAYOUT (logged-in pages) ==================== */
 
 .app-shell {
     display: flex;
@@ -145,7 +145,41 @@ body {
     padding: 32px 20px 80px;
 }
 
-/* ==================== HEADER / GREETING ==================== */
+@media (max-width: 860px) {
+    .sidebar {
+        position: fixed;
+        bottom: 0;
+        top: auto;
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        padding: 8px;
+        border-right: none;
+        border-top: 1px solid var(--border);
+        z-index: 50;
+    }
+
+    .sidebar-logo, .sidebar-bottom { display: none; }
+
+    .sidebar-nav {
+        flex-direction: row;
+        justify-content: space-around;
+        width: 100%;
+    }
+
+    .sidebar-nav a {
+        flex-direction: column;
+        gap: 2px;
+        font-size: 10px;
+        padding: 6px 8px;
+    }
+
+    .main {
+        padding-bottom: 90px;
+    }
+}
+
+/* ==================== PAGE HEADER / GREETING ==================== */
 
 .page-heading {
     font-family: var(--font-display);
@@ -352,7 +386,7 @@ body {
     color: var(--accent);
 }
 
-/* ==================== FORMS ==================== */
+/* ==================== FORMS (comments etc.) ==================== */
 
 .comment-form {
     display: flex;
@@ -460,239 +494,6 @@ body {
     background: #FECACA;
 }
 
-/* ==================== LANDING PAGE ==================== */
-
-.landing-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 32px;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface);
-}
-
-.landing-logo {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 20px;
-}
-
-.landing-nav {
-    display: flex;
-    align-items: center;
-    gap: 28px;
-}
-
-.landing-nav a {
-    color: var(--text-muted);
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 14px;
-}
-
-.landing-nav a:hover {
-    color: var(--text);
-}
-
-.landing-nav .btn {
-    padding: 8px 18px;
-}
-
-.hero {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 90px 24px 60px;
-    text-align: center;
-}
-
-.hero h1 {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 44px;
-    line-height: 1.15;
-    margin: 0 0 18px;
-}
-
-.hero p {
-    color: var(--text-muted);
-    font-size: 17px;
-    line-height: 1.6;
-    margin: 0 0 32px;
-}
-
-.feature-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-    max-width: 960px;
-    margin: 20px auto 100px;
-    padding: 0 24px;
-}
-
-.feature-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 28px 24px;
-    text-align: left;
-}
-
-.feature-card .feature-icon {
-    font-size: 28px;
-    margin-bottom: 14px;
-    display: block;
-}
-
-.feature-card h2 {
-    font-family: var(--font-display);
-    font-size: 17px;
-    margin: 0 0 8px;
-}
-
-.feature-card p {
-    color: var(--text-muted);
-    font-size: 14px;
-    line-height: 1.5;
-    margin: 0;
-}
-
-.landing-footer {
-    text-align: center;
-    color: var(--text-muted);
-    font-size: 13px;
-    padding: 24px;
-    border-top: 1px solid var(--border);
-}
-
-/* ==================== AUTH PAGES ==================== */
-
-.auth-wrap {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-}
-
-.auth-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow);
-    padding: 40px 36px;
-    width: 100%;
-    max-width: 400px;
-}
-
-.auth-logo {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 20px;
-    text-align: center;
-    margin-bottom: 24px;
-}
-
-.auth-card h1 {
-    font-family: var(--font-display);
-    font-size: 22px;
-    margin: 0 0 6px;
-    text-align: center;
-}
-
-.auth-card .auth-subtitle {
-    color: var(--text-muted);
-    font-size: 14px;
-    text-align: center;
-    margin: 0 0 28px;
-}
-
-.field-group {
-    margin-bottom: 16px;
-}
-
-.field-group label {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 6px;
-    color: var(--text);
-}
-
-.field-group input,
-.field-group select {
-    width: 100%;
-    padding: 11px 14px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-family: var(--font-body);
-    font-size: 14px;
-    outline: none;
-    background: var(--surface);
-    color: var(--text);
-}
-
-.field-group input:focus,
-.field-group select:focus {
-    border-color: var(--accent);
-}
-
-.auth-card .btn {
-    width: 100%;
-    margin-top: 6px;
-    padding: 12px;
-}
-
-.auth-footer-note {
-    text-align: center;
-    font-size: 13px;
-    color: var(--text-muted);
-    margin-top: 20px;
-}
-
-.auth-footer-note a {
-    color: var(--accent);
-    font-weight: 600;
-    text-decoration: none;
-}
-
-.auth-footer-note a:hover {
-    text-decoration: underline;
-}
-
-@media (max-width: 860px) {
-    .sidebar {
-        position: fixed;
-        bottom: 0;
-        top: auto;
-        width: 100%;
-        height: auto;
-        flex-direction: row;
-        padding: 8px;
-        border-right: none;
-        border-top: 1px solid var(--border);
-        z-index: 50;
-    }
-
-    .sidebar-logo, .sidebar-bottom { display: none; }
-
-    .sidebar-nav {
-        flex-direction: row;
-        justify-content: space-around;
-        width: 100%;
-    }
-
-    .sidebar-nav a {
-        flex-direction: column;
-        gap: 2px;
-        font-size: 10px;
-        padding: 6px 8px;
-    }
-
-    .main {
-        padding-bottom: 90px;
-    }
-}
-
 /* ========================================
    PUBLIC PAGES (home, login, register)
 ======================================== */
@@ -768,7 +569,7 @@ body {
     margin: 0 0 32px;
 }
 
-/* ---- Feature cards ---- */
+/* ---- Feature cards (used on landing page) ---- */
 
 .feature-grid {
     display: grid;
@@ -805,14 +606,6 @@ body {
     color: var(--text-muted);
     margin: 0;
     line-height: 1.5;
-}
-
-.public-footer {
-    text-align: center;
-    padding: 30px;
-    color: var(--text-muted);
-    font-size: 13px;
-    border-top: 1px solid var(--border);
 }
 
 /* ---- Auth (login/register) ---- */
@@ -898,206 +691,159 @@ body {
     text-decoration: none;
 }
 
-/* ==================== AUTH PAGES (login/register) ==================== */
+/* ========================================
+   EXPANDED LANDING PAGE SECTIONS
+======================================== */
 
-.auth-shell {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--bg);
-    padding: 24px;
-}
-
-.auth-card {
-    width: 100%;
-    max-width: 400px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow);
-    padding: 40px 32px;
-}
-
-.auth-logo {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 24px;
+.section-label {
     text-align: center;
-    margin-bottom: 4px;
-}
-
-.auth-title {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 20px;
-    text-align: center;
-    margin: 20px 0 4px;
-}
-
-.auth-subtitle {
-    text-align: center;
-    color: var(--text-muted);
-    font-size: 14px;
-    margin: 0 0 28px;
-}
-
-.form-group {
-    margin-bottom: 16px;
-}
-
-.form-group label {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 6px;
-}
-
-.form-group input,
-.form-group select {
-    width: 100%;
-    padding: 12px 14px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    font-family: var(--font-body);
-    font-size: 14px;
-    outline: none;
-    background: var(--bg);
-    transition: border-color 0.15s ease;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-    border-color: var(--accent);
-    background: var(--surface);
-}
-
-.auth-submit {
-    width: 100%;
-    margin-top: 8px;
-}
-
-.auth-footer {
-    text-align: center;
-    font-size: 13px;
-    color: var(--text-muted);
-    margin-top: 20px;
-}
-
-.auth-footer a {
     color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 12px;
     font-weight: 600;
-    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
 }
 
-.auth-footer a:hover {
-    text-decoration: underline;
-}
-
-/* ==================== HOMEPAGE ==================== */
-
-.site-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 32px;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface);
-}
-
-.site-logo {
+.section-heading {
+    text-align: center;
     font-family: var(--font-display);
     font-weight: 800;
-    font-size: 20px;
-}
-
-.site-nav {
-    display: flex;
-    gap: 28px;
-}
-
-.site-nav a {
-    text-decoration: none;
+    font-size: 32px;
+    margin: 0 0 12px;
     color: var(--text);
-    font-weight: 500;
-    font-size: 14px;
 }
 
-.site-nav a:hover {
-    color: var(--accent);
-}
-
-.hero-section {
+.section-subheading {
     text-align: center;
-    padding: 90px 24px 70px;
-    max-width: 700px;
-    margin: 0 auto;
-}
-
-.hero-section h1 {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 44px;
-    line-height: 1.15;
-    margin: 0 0 18px;
-}
-
-.hero-section p {
     color: var(--text-muted);
-    font-size: 17px;
-    line-height: 1.6;
-    margin: 0 0 32px;
-}
-
-.feature-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 0 24px 90px;
-}
-
-.feature-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 28px;
-    text-align: center;
-}
-
-.feature-card h2 {
-    font-family: var(--font-display);
-    font-size: 18px;
-    margin: 0 0 8px;
-}
-
-.feature-card p {
-    color: var(--text-muted);
-    font-size: 14px;
+    font-size: 16px;
+    max-width: 560px;
+    margin: 0 auto 48px;
     line-height: 1.5;
+}
+
+.wide-feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 22px;
+    max-width: 1080px;
+    margin: 0 auto 90px;
+    padding: 0 24px;
+}
+
+.wide-feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 26px 22px;
+    box-shadow: var(--shadow);
+}
+
+.wide-feature-card .feature-icon {
+    font-size: 28px;
+    margin-bottom: 14px;
+}
+
+.wide-feature-card h3 {
+    font-family: var(--font-display);
+    font-size: 17px;
+    margin: 0 0 8px;
+    color: var(--text);
+}
+
+.wide-feature-card p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.55;
     margin: 0;
 }
 
-.site-footer {
+.pro-badge-tag {
+    display: inline-block;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    margin-left: 8px;
+    letter-spacing: 0.03em;
+    vertical-align: middle;
+}
+
+/* ---- Free vs Pro ---- */
+
+.plans-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    max-width: 780px;
+    margin: 0 auto 90px;
+    padding: 0 24px;
+}
+
+.plan-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px 28px;
+}
+
+.plan-card.plan-pro {
+    border: 2px solid var(--accent);
+    box-shadow: var(--shadow);
+}
+
+.plan-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 20px;
+    margin: 0 0 6px;
+}
+
+.plan-tagline {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin: 0 0 20px;
+}
+
+.plan-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.plan-list li {
+    font-size: 14px;
+    color: var(--text);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+/* ---- Footer with contact ---- */
+
+.public-footer {
     text-align: center;
-    padding: 28px;
+    padding: 40px 24px;
     color: var(--text-muted);
     font-size: 13px;
     border-top: 1px solid var(--border);
 }
 
-@media (max-width: 700px) {
-    .feature-grid {
-        grid-template-columns: 1fr;
-    }
+.public-footer a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+}
 
-    .hero-section h1 {
-        font-size: 32px;
-    }
-
-    .site-nav {
-        display: none;
-    }
+.footer-contact {
+    margin-bottom: 10px;
+    font-size: 14px;
 }
