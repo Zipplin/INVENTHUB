@@ -12,7 +12,6 @@ const https = require("https");
 const { Server } = require("socket.io");
 const { createClient } = require("@supabase/supabase-js");
 const bcrypt = require("bcryptjs");
-const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 
 const app = express();
@@ -71,15 +70,48 @@ const supabase = createClient(
 
 const SUPABASE_BUCKET = "uploads";
 
-// Email transporter for password reset links, sent via the
-// developer's own Gmail account using an App Password.
-const mailTransporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD
-    }
-});
+// Password reset emails are sent via Brevo's HTTP API rather than
+// raw SMTP — Render's free tier blocks outbound SMTP connections,
+// but a normal HTTPS API call works fine (same as our Paystack calls).
+async function sendResetEmail(toEmail, toName, resetUrl) {
+
+    await axios.post(
+        "https://api.brevo.com/v3/smtp/email",
+        {
+            sender: {
+                name: "InventHub",
+                email: process.env.GMAIL_USER
+            },
+            to: [
+                { email: toEmail, name: toName }
+            ],
+            subject: "Reset your InventHub password",
+            htmlContent: `
+                <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto;">
+                    <h2 style="color:#4F46E5;">💡 InventHub</h2>
+                    <p>Hi ${toName},</p>
+                    <p>We received a request to reset your password. Click the button below to choose a new one. This link expires in 1 hour.</p>
+                    <p style="text-align:center; margin: 30px 0;">
+                        <a href="${resetUrl}" style="background:#4F46E5; color:white; padding:12px 24px; border-radius:999px; text-decoration:none; font-weight:600;">
+                            Reset Password
+                        </a>
+                    </p>
+                    <p style="color:#71717A; font-size:13px;">
+                        If you didn't request this, you can safely ignore this email.
+                    </p>
+                </div>
+            `
+        },
+        {
+            headers: {
+                "api-key": process.env.BREVO_API_KEY,
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        }
+    );
+
+}
 
 // Multer now keeps the file in memory instead of writing to disk —
 // we push it to Supabase Storage ourselves right after.
@@ -1427,28 +1459,12 @@ app.post("/forgot-password", (req, res) => {
                     : `https://localhost:${process.env.HTTPS_PORT || 3443}/reset-password/${token}`;
 
                 try {
-                    await mailTransporter.sendMail({
-                        from: `"InventHub" <${process.env.GMAIL_USER}>`,
-                        to: user.email,
-                        subject: "Reset your InventHub password",
-                        html: `
-                            <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto;">
-                                <h2 style="color:#4F46E5;">💡 InventHub</h2>
-                                <p>Hi ${user.fullname},</p>
-                                <p>We received a request to reset your password. Click the button below to choose a new one. This link expires in 1 hour.</p>
-                                <p style="text-align:center; margin: 30px 0;">
-                                    <a href="${resetUrl}" style="background:#4F46E5; color:white; padding:12px 24px; border-radius:999px; text-decoration:none; font-weight:600;">
-                                        Reset Password
-                                    </a>
-                                </p>
-                                <p style="color:#71717A; font-size:13px;">
-                                    If you didn't request this, you can safely ignore this email.
-                                </p>
-                            </div>
-                        `
-                    });
+                    await sendResetEmail(user.email, user.fullname, resetUrl);
                 } catch (mailErr) {
-                    console.error("❌ Could not send reset email:", mailErr.message);
+                    console.error(
+                        "❌ Could not send reset email:",
+                        mailErr.response ? mailErr.response.data : mailErr.message
+                    );
                 }
 
                 res.send(genericMessage);
