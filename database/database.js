@@ -58,7 +58,9 @@ const COLUMN_MAP = {
     totallikes: "totalLikes",
     isfollowing: "isFollowing",
     resettoken: "resetToken",
-    resettokenexpires: "resetTokenExpires"
+    resettokenexpires: "resetTokenExpires",
+    isadmin: "isAdmin",
+    issuspended: "isSuspended"
 };
 
 function fixRowKeys(row) {

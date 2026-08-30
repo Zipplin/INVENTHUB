@@ -35,6 +35,10 @@
 
             <a href="/notifications">🔔 Notifications</a>
 
+            <% if (isAdmin) { %>
+                <a href="/admin/users">🛡️ Admin</a>
+            <% } %>
+
         </nav>
 
         <div class="sidebar-bottom">

@@ -196,6 +196,39 @@ app.use(session({
 }));
 // Serve static files
 app.use(express.static(__dirname));
+
+// If an account gets suspended while the person is already logged
+// in, this ends their session on their very next request instead
+// of waiting for them to log in again. Checks the database fresh
+// each time, since the session copy of isSuspended would otherwise
+// still reflect its value from whenever they logged in.
+app.use((req, res, next) => {
+
+    if (!req.session.user) {
+        return next();
+    }
+
+    db.get(
+        "SELECT isSuspended FROM users WHERE id = ?",
+        [req.session.user.id],
+        (err, row) => {
+
+            if (!err && row && row.isSuspended) {
+                return req.session.destroy(() => {
+                    res.send(`
+                        <h2>🚫 Account Suspended</h2>
+                        <p>Your account has been suspended for violating InventHub's content guidelines. If you believe this is a mistake, contact us at jesseandrew90@gmail.com.</p>
+                    `);
+                });
+            }
+
+            next();
+
+        }
+    );
+
+});
+
 // =======================
 // Home Page
 // =======================
@@ -275,6 +308,13 @@ app.post("/login", (req, res) => {
 
             if (!passwordMatches) {
                 return res.send("❌ Incorrect password.");
+            }
+
+            if (user.isSuspended) {
+                return res.send(`
+                    <h2>🚫 Account Suspended</h2>
+                    <p>Your account has been suspended for violating InventHub's content guidelines. If you believe this is a mistake, contact us at jesseandrew90@gmail.com.</p>
+                `);
             }
 
             // Quietly upgrade legacy plain-text passwords to a hash
@@ -646,6 +686,7 @@ db.get(`
     res.render("dashboard", {
         fullname: req.session.user.fullname,
         userId: req.session.user.id,
+        isAdmin: req.session.user.isAdmin,
         inventions: inventions,
 
         totalInventions: stats.totalInventions,
@@ -1536,6 +1577,78 @@ app.post("/reset-password/:token", (req, res) => {
 
                 }
             );
+
+        }
+    );
+
+});
+
+// =======================
+// Admin — User Moderation
+// =======================
+
+function requireAdmin(req, res, next) {
+
+    if (!req.session.user) {
+        return res.redirect("/login.html");
+    }
+
+    if (!req.session.user.isAdmin) {
+        return res.status(403).send("❌ Admins only.");
+    }
+
+    next();
+
+}
+
+app.get("/admin/users", requireAdmin, (req, res) => {
+
+    db.all(
+        "SELECT id, fullname, email, accountType, isSuspended, isAdmin FROM users ORDER BY fullname ASC",
+        [],
+        (err, users) => {
+
+            if (err) {
+                return res.send(err.message);
+            }
+
+            res.render("admin-users", { users: users });
+
+        }
+    );
+
+});
+
+app.post("/admin/suspend/:id", requireAdmin, (req, res) => {
+
+    db.run(
+        "UPDATE users SET isSuspended = 1 WHERE id = ? AND isAdmin = 0",
+        [req.params.id],
+        (err) => {
+
+            if (err) {
+                return res.send(err.message);
+            }
+
+            res.redirect("/admin/users");
+
+        }
+    );
+
+});
+
+app.post("/admin/unsuspend/:id", requireAdmin, (req, res) => {
+
+    db.run(
+        "UPDATE users SET isSuspended = 0 WHERE id = ?",
+        [req.params.id],
+        (err) => {
+
+            if (err) {
+                return res.send(err.message);
+            }
+
+            res.redirect("/admin/users");
 
         }
     );

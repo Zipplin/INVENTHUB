@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin — User Moderation</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="app-shell">
+
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">💡 InventHub</div>
+
+        <nav class="sidebar-nav">
+            <a href="/dashboard">🏠 Dashboard</a>
+            <a href="/my-inventions">💡 My Inventions</a>
+            <a href="/exhibitions">🏆 Exhibitions</a>
+            <a href="/marketplace">🛒 Marketplace</a>
+            <a href="/bookmarks">⭐ Bookmarks</a>
+            <a href="/conversations">💬 Messages</a>
+            <a href="/notifications">🔔 Notifications</a>
+            <a href="/admin/users" class="active">🛡️ Admin</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="/upload.html">➕ Upload Invention</a>
+            <a href="/logout">🚪 Logout</a>
+        </div>
+
+    </aside>
+
+    <main class="main" style="max-width: 800px;">
+
+        <h1 class="page-heading">🛡️ User Moderation</h1>
+        <p class="page-subheading">Suspend accounts that violate content guidelines.</p>
+
+        <% users.forEach(function(user) { %>
+
+            <div class="feed-card feed-card-header" style="padding: 16px; align-items:center;">
+
+                <img
+                    src="https://ui-avatars.com/api/?name=<%= encodeURIComponent(user.fullname) %>&background=EEF2FF&color=4F46E5"
+                    class="avatar"
+                    alt="<%= user.fullname %>">
+
+                <div class="feed-card-header-info" style="flex:1;">
+                    <span class="inventor-name">
+                        <%= user.fullname %>
+                        <% if (user.isAdmin) { %>
+                            <span class="pro-badge-tag">ADMIN</span>
+                        <% } %>
+                        <% if (user.isSuspended) { %>
+                            <span class="pro-badge-tag" style="background:#FEE2E2; color:#DC2626;">SUSPENDED</span>
+                        <% } %>
+                    </span>
+                    <span style="font-size:13px; color:var(--text-muted);">
+                        <%= user.email %> · <%= user.accountType %>
+                    </span>
+                </div>
+
+                <% if (user.isAdmin) { %>
+
+                    <span style="font-size:12px; color:var(--text-muted);">
+                        Can't suspend an admin
+                    </span>
+
+                <% } else if (user.isSuspended) { %>
+
+                    <form action="/admin/unsuspend/<%= user.id %>" method="POST">
+                        <button type="submit" class="btn btn-outline" style="padding: 8px 16px; font-size:13px;">
+                            ✅ Unsuspend
+                        </button>
+                    </form>
+
+                <% } else { %>
+
+                    <form action="/admin/suspend/<%= user.id %>" method="POST"
+                          onsubmit="return confirm('Suspend this account?');">
+                        <button type="submit" class="btn btn-danger" style="padding: 8px 16px; font-size:13px;">
+                            🚫 Suspend
+                        </button>
+                    </form>
+
+                <% } %>
+
+            </div>
+
+        <% }); %>
+
+    </main>
+
+</div>
+
+</body>
+</html>
