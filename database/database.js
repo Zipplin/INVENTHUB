@@ -56,7 +56,9 @@ const COLUMN_MAP = {
     productname: "productName",
     totalinventions: "totalInventions",
     totallikes: "totalLikes",
-    isfollowing: "isFollowing"
+    isfollowing: "isFollowing",
+    resettoken: "resetToken",
+    resettokenexpires: "resetTokenExpires"
 };
 
 function fixRowKeys(row) {

@@ -21,6 +21,8 @@
     "multer": "^2.2.0",
     "pg": "^8.13.1",
     "socket.io": "^4.8.3",
-    "@supabase/supabase-js": "^2.45.4"
+    "@supabase/supabase-js": "^2.45.4",
+    "bcryptjs": "^2.4.3",
+    "nodemailer": "^6.9.16"
   }
 }

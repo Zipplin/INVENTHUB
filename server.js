@@ -11,6 +11,9 @@ const http = require("http");
 const https = require("https");
 const { Server } = require("socket.io");
 const { createClient } = require("@supabase/supabase-js");
+const bcrypt = require("bcryptjs");
+const nodemailer = require("nodemailer");
+const crypto = require("crypto");
 
 const app = express();
 
@@ -67,6 +70,16 @@ const supabase = createClient(
 );
 
 const SUPABASE_BUCKET = "uploads";
+
+// Email transporter for password reset links, sent via the
+// developer's own Gmail account using an App Password.
+const mailTransporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_APP_PASSWORD
+    }
+});
 
 // Multer now keeps the file in memory instead of writing to disk —
 // we push it to Supabase Storage ourselves right after.
@@ -163,7 +176,7 @@ app.get("/", (req, res) => {
 // =======================
 // Register User
 // =======================
-app.post("/register", (req, res) => {
+app.post("/register", async (req, res) => {
 
     const {
         fullname,
@@ -174,13 +187,15 @@ app.post("/register", (req, res) => {
         password
     } = req.body;
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const sql = `
         INSERT INTO users
         (fullname, email, country, city, accountType, password)
         VALUES (?, ?, ?, ?, ?, ?)
     `;
 
-    db.run(sql, [fullname, email, country, city, accountType, password], function(err) {
+    db.run(sql, [fullname, email, country, city, accountType, hashedPassword], function(err) {
 
         if (err) {
             console.log(err.message);
@@ -207,7 +222,7 @@ app.post("/login", (req, res) => {
     db.get(
         "SELECT * FROM users WHERE email = ?",
         [email],
-        (err, user) => {
+        async (err, user) => {
 
             if (err) {
                 return res.send("Database Error");
@@ -217,13 +232,33 @@ app.post("/login", (req, res) => {
                 return res.send("❌ Email not found.");
             }
 
-            if (user.password !== password) {
+            // Existing accounts may still have a plain-text password
+            // from before hashing was added. bcrypt hashes always
+            // start with $2a$ / $2b$ / $2y$ — anything else is legacy.
+            const isHashed = /^\$2[aby]\$/.test(user.password);
+
+            const passwordMatches = isHashed
+                ? await bcrypt.compare(password, user.password)
+                : password === user.password;
+
+            if (!passwordMatches) {
                 return res.send("❌ Incorrect password.");
             }
-req.session.user = user;
 
-res.redirect("/dashboard");
-            
+            // Quietly upgrade legacy plain-text passwords to a hash
+            // now that we've verified the password is correct.
+            if (!isHashed) {
+                const newHash = await bcrypt.hash(password, 10);
+                db.run("UPDATE users SET password = ? WHERE id = ?", [newHash, user.id]);
+                user.password = newHash;
+            }
+
+            // Don't keep the password hash sitting in the session.
+            delete user.password;
+
+            req.session.user = user;
+
+            res.redirect("/dashboard");
 
         }
     );
@@ -1212,6 +1247,13 @@ app.get("/chat/:id", (req, res) => {
 
     const otherUserId = req.params.id;
 
+    // Mark any messages from this person as read now that the
+    // user is actually viewing the conversation.
+    db.run(
+        "UPDATE messages SET isRead = 1 WHERE senderId = ? AND receiverId = ?",
+        [otherUserId, req.session.user.id]
+    );
+
     db.get(
         "SELECT * FROM users WHERE id = ?",
         [otherUserId],
@@ -1345,6 +1387,145 @@ app.get("/notifications", (req, res) => {
     );
 
 });
+// =======================
+// Forgot Password
+// =======================
+
+app.post("/forgot-password", (req, res) => {
+
+    const { email } = req.body;
+
+    db.get("SELECT * FROM users WHERE email = ?", [email], (err, user) => {
+
+        // Always show the same message whether or not the email
+        // exists — this avoids revealing which emails are registered.
+        const genericMessage = `
+            <h2>📧 Check your email</h2>
+            <p>If an account exists for that email, a password reset link has been sent.</p>
+            <a href="/login.html">Return to Login</a>
+        `;
+
+        if (err || !user) {
+            return res.send(genericMessage);
+        }
+
+        const token = crypto.randomBytes(32).toString("hex");
+        const expires = Date.now() + 60 * 60 * 1000; // 1 hour, as epoch ms
+
+        db.run(
+            "UPDATE users SET resetToken = ?, resetTokenExpires = ? WHERE id = ?",
+            [token, expires, user.id],
+            async (updateErr) => {
+
+                if (updateErr) {
+                    console.error("❌ Could not save reset token:", updateErr.message);
+                    return res.send(genericMessage);
+                }
+
+                const resetUrl = isProduction
+                    ? `https://${req.hostname}/reset-password/${token}`
+                    : `https://localhost:${process.env.HTTPS_PORT || 3443}/reset-password/${token}`;
+
+                try {
+                    await mailTransporter.sendMail({
+                        from: `"InventHub" <${process.env.GMAIL_USER}>`,
+                        to: user.email,
+                        subject: "Reset your InventHub password",
+                        html: `
+                            <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto;">
+                                <h2 style="color:#4F46E5;">💡 InventHub</h2>
+                                <p>Hi ${user.fullname},</p>
+                                <p>We received a request to reset your password. Click the button below to choose a new one. This link expires in 1 hour.</p>
+                                <p style="text-align:center; margin: 30px 0;">
+                                    <a href="${resetUrl}" style="background:#4F46E5; color:white; padding:12px 24px; border-radius:999px; text-decoration:none; font-weight:600;">
+                                        Reset Password
+                                    </a>
+                                </p>
+                                <p style="color:#71717A; font-size:13px;">
+                                    If you didn't request this, you can safely ignore this email.
+                                </p>
+                            </div>
+                        `
+                    });
+                } catch (mailErr) {
+                    console.error("❌ Could not send reset email:", mailErr.message);
+                }
+
+                res.send(genericMessage);
+
+            }
+        );
+
+    });
+
+});
+
+app.get("/reset-password/:token", (req, res) => {
+
+    db.get(
+        "SELECT * FROM users WHERE resetToken = ?",
+        [req.params.token],
+        (err, user) => {
+
+            const tokenValid = user &&
+                user.resetTokenExpires &&
+                Number(user.resetTokenExpires) > Date.now();
+
+            res.render("reset-password", {
+                token: req.params.token,
+                valid: !!tokenValid
+            });
+
+        }
+    );
+
+});
+
+app.post("/reset-password/:token", (req, res) => {
+
+    const { password } = req.body;
+
+    db.get(
+        "SELECT * FROM users WHERE resetToken = ?",
+        [req.params.token],
+        async (err, user) => {
+
+            const tokenValid = user &&
+                user.resetTokenExpires &&
+                Number(user.resetTokenExpires) > Date.now();
+
+            if (!tokenValid) {
+                return res.render("reset-password", {
+                    token: req.params.token,
+                    valid: false
+                });
+            }
+
+            const newHash = await bcrypt.hash(password, 10);
+
+            db.run(
+                "UPDATE users SET password = ?, resetToken = NULL, resetTokenExpires = NULL WHERE id = ?",
+                [newHash, user.id],
+                (updateErr) => {
+
+                    if (updateErr) {
+                        return res.send("❌ Could not reset password. Please try again.");
+                    }
+
+                    res.send(`
+                        <h2>✅ Password updated</h2>
+                        <p>Your password has been reset successfully.</p>
+                        <a href="/login.html">Go to Login</a>
+                    `);
+
+                }
+            );
+
+        }
+    );
+
+});
+
 // =======================
 // Logout
 // =======================
