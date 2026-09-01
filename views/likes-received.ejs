@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Followers - InventHub</title>
+    <title>Likes Received</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -33,37 +33,40 @@
 
     <main class="main">
 
-        <h1 class="page-heading">👥 My Followers</h1>
-        <p class="page-subheading">People following <strong><%= fullname %></strong></p>
+        <h1 class="page-heading">❤️ Likes Received</h1>
+        <p class="page-subheading">People who liked <%= fullname %>'s inventions</p>
 
-        <% if (followers.length === 0) { %>
+        <% if (likes.length === 0) { %>
 
             <div class="feed-card" style="padding: 40px 20px; text-align:center;">
                 <p style="color:var(--text-muted); margin:0;">
-                    No followers yet. When people follow you, they'll appear here.
+                    No likes yet. Once someone likes your invention, they'll show up here.
                 </p>
             </div>
 
         <% } else { %>
 
-            <% followers.forEach(follower => { %>
+            <% likes.forEach(function(like) { %>
 
                 <div class="feed-card feed-card-header" style="padding: 16px; align-items:center;">
 
-                    <a href="/inventor/<%= follower.id %>">
-                        <% if (follower.profileImage) { %>
-                            <img src="/uploads/<%= follower.profileImage %>" class="avatar" alt="<%= follower.fullname %>">
+                    <a href="/inventor/<%= like.likerId %>">
+                        <% if (like.profileImage) { %>
+                            <img src="/uploads/<%= like.profileImage %>" class="avatar" alt="<%= like.fullname %>">
                         <% } else { %>
-                            <img src="https://ui-avatars.com/api/?name=<%= encodeURIComponent(follower.fullname) %>&background=EEF2FF&color=4F46E5" class="avatar" alt="<%= follower.fullname %>">
+                            <img src="https://ui-avatars.com/api/?name=<%= encodeURIComponent(like.fullname) %>&background=EEF2FF&color=4F46E5" class="avatar" alt="<%= like.fullname %>">
                         <% } %>
                     </a>
 
                     <div class="feed-card-header-info" style="flex:1;">
-                        <span class="inventor-name"><%= follower.fullname %></span>
+                        <a href="/inventor/<%= like.likerId %>" class="inventor-name"><%= like.fullname %></a>
+                        <span style="font-size:13px; color:var(--text-muted);">
+                            liked "<%= like.title %>"
+                        </span>
                     </div>
 
-                    <a href="/inventor/<%= follower.id %>" class="btn btn-outline" style="padding: 8px 16px; font-size:13px;">
-                        View Profile
+                    <a href="/invention/<%= like.inventionId %>" class="btn btn-outline" style="padding: 8px 16px; font-size:13px;">
+                        View
                     </a>
 
                 </div>

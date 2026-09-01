@@ -1,153 +1,153 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventor Profile</title>
-    <link rel="stylesheet" href="/style.css">
-
-    <style>
-        body{
-            font-family:Arial;
-            background:#f4f4f4;
-        }
-
-        .container{
-            width:90%;
-            max-width:1000px;
-            margin:auto;
-        }
-
-        .profile{
-            background:white;
-            padding:20px;
-            margin:20px 0;
-            border-radius:10px;
-            box-shadow:0 2px 8px rgba(0,0,0,.1);
-        }
-
-        .card{
-            background:white;
-            padding:20px;
-            margin:20px 0;
-            border-radius:10px;
-            box-shadow:0 2px 8px rgba(0,0,0,.1);
-        }
-
-        img{
-            width:100%;
-            max-height:350px;
-            object-fit:cover;
-            border-radius:10px;
-        }
-    </style>
-
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-<div class="container">
+<div class="app-shell">
 
-<div class="profile">
+    <aside class="sidebar">
 
-<h1>
-    <%= user.fullname %>
+        <div class="sidebar-logo">💡 InventHub</div>
 
-    <% if (user.accountType === "pro") { %>
+        <nav class="sidebar-nav">
+            <a href="/dashboard">🏠 Dashboard</a>
+            <a href="/my-inventions">💡 My Inventions</a>
+            <a href="/exhibitions">🏆 Exhibitions</a>
+            <a href="/marketplace">🛒 Marketplace</a>
+            <a href="/bookmarks">⭐ Bookmarks</a>
+            <a href="/conversations">💬 Messages</a>
+            <a href="/notifications">🔔 Notifications</a>
+        </nav>
 
-        <span style="
-            display:inline-block;
-            margin-left:8px;
-            padding:5px 12px;
-            background:#16a34a;
-            color:white;
-            border-radius:15px;
-            font-size:13px;
-            font-weight:bold;
-            vertical-align:middle;
-        ">
-            ⭐ PRO INVENTOR
-        </span>
+        <div class="sidebar-bottom">
+            <a href="/upload.html">➕ Upload Invention</a>
+            <a href="/logout">🚪 Logout</a>
+        </div>
 
-    <% } %>
-</h1>
-<div style="margin:15px 0;font-size:18px;">
+    </aside>
 
-    📂 <strong><%= totalInventions %></strong> Inventions
+    <main class="main">
 
-    &nbsp;&nbsp;&nbsp;
+        <div class="feed-card" style="padding: 28px;">
 
-    ❤️ <strong><%= totalLikes %></strong> Likes
+            <div style="display:flex; align-items:center; gap:16px; margin-bottom:20px;">
 
-    <br><br>
+                <% if (user.profileImage) { %>
+                    <img src="/uploads/<%= user.profileImage %>" class="avatar" style="width:72px; height:72px;" alt="<%= user.fullname %>">
+                <% } else { %>
+                    <img src="https://ui-avatars.com/api/?name=<%= encodeURIComponent(user.fullname) %>&background=EEF2FF&color=4F46E5" class="avatar" style="width:72px; height:72px;" alt="<%= user.fullname %>">
+                <% } %>
 
-    👥 <strong><%= followers %></strong> Followers
+                <div>
+                    <h1 class="page-heading" style="margin-bottom:4px;">
+                        <%= user.fullname %>
+                        <% if (user.accountType === "pro") { %>
+                            <span class="pro-badge-tag" style="background:#DCFCE7; color:#16A34A;">⭐ PRO</span>
+                        <% } %>
+                    </h1>
+                    <span style="color:var(--text-muted); font-size:14px;">
+                        <%= user.city %>, <%= user.country %>
+                    </span>
+                </div>
 
-    &nbsp;&nbsp;&nbsp;
+            </div>
 
-    ➕ <strong><%= following %></strong> Following
+            <div class="stat-bar" style="margin: 20px 0;">
 
-</div>
-<% if (currentUserId != user.id) { %>
+                <div class="stat-pill">
+                    <span class="stat-number"><%= totalInventions %></span>
+                    <span class="stat-label">Inventions</span>
+                </div>
 
-    <form action="/follow/<%= user.id %>" method="POST" style="display:inline;">
-        <button type="submit">Follow</button>
-    </form>
+                <div class="stat-pill">
+                    <span class="stat-number"><%= totalLikes %></span>
+                    <span class="stat-label">Likes</span>
+                </div>
 
-    <a href="/messages/<%= user.id %>">
-        <button>Message</button>
-    </a>
+                <div class="stat-pill">
+                    <span class="stat-number"><%= followers %></span>
+                    <span class="stat-label">Followers</span>
+                </div>
 
-<% } %>
+                <div class="stat-pill">
+                    <span class="stat-number"><%= following %></span>
+                    <span class="stat-label">Following</span>
+                </div>
 
-<p><strong>Email:</strong> <%= user.email %></p>
+            </div>
 
-<p><strong>Country:</strong> <%= user.country %></p>
+            <% if (currentUserId != user.id) { %>
 
-<p><strong>City:</strong> <%= user.city %></p>
+                <div class="action-bar" style="border-top:none; padding-top:0; margin-bottom:20px;">
 
-<p><strong>Account:</strong> <%= user.accountType %></p>
+                    <form action="/follow/<%= user.id %>" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-primary">➕ Follow</button>
+                    </form>
 
-</div>
+                    <a href="/messages/<%= user.id %>" class="btn btn-outline">💬 Message</a>
 
-<h2>Published Inventions</h2>
+                </div>
 
-<% if(inventions.length === 0){ %>
+            <% } %>
 
-<h3>No inventions published yet.</h3>
+            <div class="spec-tags">
+                <span class="spec-tag">EMAIL: <%= user.email %></span>
+                <span class="spec-tag">ACCOUNT: <%= user.accountType %></span>
+            </div>
 
-<% } else { %>
+        </div>
 
-<% inventions.forEach(function(invention){ %>
+        <h2 class="page-heading" style="font-size:20px; margin: 28px 0 16px;">Published Inventions</h2>
 
-<div class="card">
+        <% if (inventions.length === 0) { %>
 
-<% if(invention.image){ %>
+            <div class="feed-card" style="padding: 40px 20px; text-align:center;">
+                <p style="color:var(--text-muted); margin:0;">
+                    No inventions published yet.
+                </p>
+            </div>
 
-<img src="/uploads/<%= invention.image %>">
+        <% } else { %>
 
-<% } %>
+            <% inventions.forEach(function(invention) { %>
 
-<h2><%= invention.title %></h2>
+                <div class="feed-card">
 
-<p><strong>Category:</strong> <%= invention.category %></p>
+                    <% if (invention.image) { %>
+                        <img src="/uploads/<%= invention.image %>" class="feed-card-image" alt="Invention image">
+                    <% } %>
 
-<p><strong>Industry:</strong> <%= invention.industry %></p>
+                    <div class="feed-card-body">
 
-<p><strong>Country:</strong> <%= invention.country %></p>
+                        <h2 class="invention-title"><%= invention.title %></h2>
 
-<p><strong>Stage:</strong> <%= invention.stage %></p>
+                        <div class="spec-tags">
+                            <span class="spec-tag"><%= invention.category %></span>
+                            <span class="spec-tag"><%= invention.industry %></span>
+                            <span class="spec-tag"><%= invention.country %></span>
+                            <span class="spec-tag">STAGE: <%= invention.stage %></span>
+                        </div>
 
-<p><strong>Looking For:</strong> <%= invention.lookingFor %></p>
+                        <p class="invention-description"><%= invention.description %></p>
 
-<p><%= invention.description %></p>
+                        <div class="meta-row">
+                            <span>🤝 Looking for: <%= invention.lookingFor %></span>
+                        </div>
 
-</div>
+                    </div>
 
-<% }) %>
+                </div>
 
-<% } %>
+            <% }) %>
 
-<br>
+        <% } %>
 
-<a href="/dashboard">⬅ Back to Dashboard</a>
+    </main>
 
 </div>
 

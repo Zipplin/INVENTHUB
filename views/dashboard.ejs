@@ -60,7 +60,7 @@
                 <span class="stat-label">Inventions</span>
             </a>
 
-            <a href="/my-inventions" class="stat-pill">
+            <a href="/likes-received" class="stat-pill">
                 <span class="stat-number"><%= totalLikes %></span>
                 <span class="stat-label">Likes</span>
             </a>
@@ -93,11 +93,13 @@
 
                     <div class="feed-card-header">
 
-                        <% if (invention.profileImage) { %>
-                            <img src="/uploads/<%= invention.profileImage %>" class="avatar" alt="<%= invention.fullname %>">
-                        <% } else { %>
-                            <img src="https://via.placeholder.com/60" class="avatar" alt="Profile picture">
-                        <% } %>
+                        <a href="/inventor/<%= invention.userId %>">
+                            <% if (invention.profileImage) { %>
+                                <img src="/uploads/<%= invention.profileImage %>" class="avatar" alt="<%= invention.fullname %>">
+                            <% } else { %>
+                                <img src="https://via.placeholder.com/60" class="avatar" alt="Profile picture">
+                            <% } %>
+                        </a>
 
                         <div class="feed-card-header-info">
                             <a href="/inventor/<%= invention.userId %>" class="inventor-name">

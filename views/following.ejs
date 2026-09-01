@@ -50,11 +50,13 @@
 
                 <div class="feed-card feed-card-header" style="padding: 16px; align-items:center;">
 
-                    <% if (person.profileImage) { %>
-                        <img src="/uploads/<%= person.profileImage %>" class="avatar" alt="<%= person.fullname %>">
-                    <% } else { %>
-                        <img src="https://ui-avatars.com/api/?name=<%= encodeURIComponent(person.fullname) %>&background=EEF2FF&color=4F46E5" class="avatar" alt="<%= person.fullname %>">
-                    <% } %>
+                    <a href="/inventor/<%= person.id %>">
+                        <% if (person.profileImage) { %>
+                            <img src="/uploads/<%= person.profileImage %>" class="avatar" alt="<%= person.fullname %>">
+                        <% } else { %>
+                            <img src="https://ui-avatars.com/api/?name=<%= encodeURIComponent(person.fullname) %>&background=EEF2FF&color=4F46E5" class="avatar" alt="<%= person.fullname %>">
+                        <% } %>
+                    </a>
 
                     <div class="feed-card-header-info" style="flex:1;">
                         <span class="inventor-name"><%= person.fullname %></span>

@@ -1,51 +1,99 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Invention</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-<div class="register-container">
+<div class="app-shell">
 
-<h1>✏ Edit Invention</h1>
+    <aside class="sidebar">
 
-<form action="/update/<%= invention.id %>" method="POST">
+        <div class="sidebar-logo">💡 InventHub</div>
 
-<label>Title</label><br>
-<input type="text" name="title" value="<%= invention.title %>" required><br><br>
+        <nav class="sidebar-nav">
+            <a href="/dashboard">🏠 Dashboard</a>
+            <a href="/my-inventions" class="active">💡 My Inventions</a>
+            <a href="/exhibitions">🏆 Exhibitions</a>
+            <a href="/marketplace">🛒 Marketplace</a>
+            <a href="/bookmarks">⭐ Bookmarks</a>
+            <a href="/conversations">💬 Messages</a>
+            <a href="/notifications">🔔 Notifications</a>
+        </nav>
 
-<label>Category</label><br>
-<input type="text" name="category" value="<%= invention.category %>" required><br><br>
+        <div class="sidebar-bottom">
+            <a href="/upload.html">➕ Upload Invention</a>
+            <a href="/logout">🚪 Logout</a>
+        </div>
 
-<label>Industry</label><br>
-<input type="text" name="industry" value="<%= invention.industry %>" required><br><br>
+    </aside>
 
-<label>Country</label><br>
-<input type="text" name="country" value="<%= invention.country %>" required><br><br>
+    <main class="main">
 
-<label>Stage</label><br>
-<input type="text" name="stage" value="<%= invention.stage %>" required><br><br>
+        <h1 class="page-heading">✏️ Edit Invention</h1>
 
-<label>Looking For</label><br>
-<input type="text" name="lookingFor" value="<%= invention.lookingFor %>" required><br><br>
+        <div class="feed-card" style="padding: 28px;">
 
-<label>Description</label><br>
-<textarea
-name="description"
-rows="8"
-cols="60"
-required><%= invention.description %></textarea>
+            <form action="/update/<%= invention.id %>" method="POST">
 
-<br><br>
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" name="title" value="<%= invention.title %>" required>
+                </div>
 
-<button type="submit">💾 Save Changes</button>
+                <div class="form-group">
+                    <label>Category</label>
+                    <input type="text" name="category" value="<%= invention.category %>" required>
+                </div>
 
-</form>
+                <div class="form-group">
+                    <label>Industry</label>
+                    <input type="text" name="industry" value="<%= invention.industry %>" required>
+                </div>
 
-<br>
+                <div class="form-group">
+                    <label>Country</label>
+                    <input type="text" name="country" value="<%= invention.country %>" required>
+                </div>
 
-<a href="/my-inventions">⬅ Back to My Inventions</a>
+                <div class="form-group">
+                    <label>Stage</label>
+                    <input type="text" name="stage" value="<%= invention.stage %>" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Looking For</label>
+                    <input type="text" name="lookingFor" value="<%= invention.lookingFor %>" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea
+                        name="description"
+                        rows="8"
+                        required
+                        style="width:100%; padding:11px 14px; border:1px solid var(--border); border-radius:var(--radius-sm); font-family:var(--font-body); font-size:14px; resize:vertical;"
+                    ><%= invention.description %></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width:100%;">
+                    💾 Save Changes
+                </button>
+
+            </form>
+
+        </div>
+
+        <p style="margin-top:16px;">
+            <a href="/my-inventions" style="color:var(--accent); text-decoration:none; font-weight:600; font-size:14px;">
+                ← Back to My Inventions
+            </a>
+        </p>
+
+    </main>
 
 </div>
 

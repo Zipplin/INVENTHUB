@@ -60,7 +60,8 @@ const COLUMN_MAP = {
     resettoken: "resetToken",
     resettokenexpires: "resetTokenExpires",
     isadmin: "isAdmin",
-    issuspended: "isSuspended"
+    issuspended: "isSuspended",
+    likerid: "likerId"
 };
 
 function fixRowKeys(row) {

@@ -726,6 +726,43 @@ app.get("/my-inventions", (req, res) => {
 
 });
 
+app.get("/likes-received", (req, res) => {
+
+    if (!req.session.user) {
+        return res.redirect("/login.html");
+    }
+
+    db.all(
+        `
+        SELECT
+            users.id AS likerId,
+            users.fullname,
+            users.profileImage,
+            inventions.id AS inventionId,
+            inventions.title
+        FROM likes
+        INNER JOIN inventions ON likes.inventionId = inventions.id
+        INNER JOIN users ON likes.userId = users.id
+        WHERE inventions.userId = ?
+        ORDER BY likes.id DESC
+        `,
+        [req.session.user.id],
+        (err, likes) => {
+
+            if (err) {
+                return res.send(err.message);
+            }
+
+            res.render("likes-received", {
+                fullname: req.session.user.fullname,
+                likes: likes
+            });
+
+        }
+    );
+
+});
+
 // =======================
 // Followers
 // =======================

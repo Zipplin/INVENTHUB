@@ -1,82 +1,591 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title><%= invention.title %></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title><%= invention.title %> | InventHub</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f6f7fb;
+            color: #18181b;
+        }
+
+        /* =========================
+           TOP NAVIGATION
+        ========================= */
+
+        .topbar {
+            height: 70px;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: #4f46e5;
+            text-decoration: none;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: #52525b;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .back-btn:hover {
+            color: #4f46e5;
+        }
+
+        /* =========================
+           MAIN CONTAINER
+        ========================= */
+
+        .page {
+            max-width: 1150px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* =========================
+           MAIN CARD
+        ========================= */
+
+        .invention-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 35px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e5e7eb;
+        }
+
+        /* =========================
+           IMAGE
+        ========================= */
+
+        .image-section {
+            width: 100%;
+            background: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 420px;
+            padding: 25px;
+        }
+
+        .image-section img {
+            max-width: 100%;
+            max-height: 550px;
+            object-fit: contain;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+        }
+
+        /* =========================
+           CONTENT
+        ========================= */
+
+        .content {
+            padding: 35px;
+        }
+
+        .title {
+            font-size: 38px;
+            line-height: 1.15;
+            margin-bottom: 15px;
+            color: #18181b;
+        }
+
+        /* =========================
+           INVENTOR
+        ========================= */
+
+        .inventor {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            color: #52525b;
+        }
+
+        .inventor-name {
+            font-weight: 600;
+            color: #27272a;
+        }
+
+        .pro-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #dcfce7;
+            color: #15803d;
+            padding: 5px 11px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        /* =========================
+           INFORMATION GRID
+        ========================= */
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 35px;
+        }
+
+        .info-box {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 17px;
+        }
+
+        .info-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #71717a;
+            font-weight: 700;
+            margin-bottom: 7px;
+        }
+
+        .info-value {
+            font-size: 15px;
+            font-weight: 600;
+            color: #27272a;
+            word-break: break-word;
+        }
+
+        /* =========================
+           DESCRIPTION
+        ========================= */
+
+        .description-section {
+            margin-top: 10px;
+            padding-top: 30px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .description-section h2 {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .description {
+            color: #52525b;
+            font-size: 16px;
+            line-height: 1.8;
+            white-space: pre-line;
+        }
+
+        /* =========================
+           ACTION BAR
+        ========================= */
+
+        .action-area {
+            margin-top: 35px;
+            padding-top: 25px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .likes {
+            font-size: 15px;
+            font-weight: 600;
+            color: #52525b;
+            margin-bottom: 18px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            border: none;
+            border-radius: 10px;
+            padding: 13px 20px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .like-btn {
+            background: #f4f4f5;
+            color: #27272a;
+        }
+
+        .like-btn:hover {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .contact-btn {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .contact-btn:hover {
+            background: #4338ca;
+            transform: translateY(-1px);
+        }
+
+        .interest-btn {
+            background: #16a34a;
+            color: white;
+        }
+
+        .interest-btn:hover {
+            background: #15803d;
+            transform: translateY(-1px);
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .footer {
+            text-align: center;
+            padding: 35px 20px;
+            color: #71717a;
+            font-size: 13px;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 768px) {
+
+            .topbar {
+                padding: 0 20px;
+            }
+
+            .logo {
+                font-size: 21px;
+            }
+
+            .page {
+                margin: 20px auto;
+                padding: 0 12px;
+            }
+
+            .image-section {
+                min-height: 250px;
+                padding: 15px;
+            }
+
+            .content {
+                padding: 23px;
+            }
+
+            .title {
+                font-size: 29px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .description {
+                font-size: 15px;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .title {
+                font-size: 26px;
+            }
+
+            .image-section {
+                min-height: 220px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-<a href="/dashboard">← Back to Dashboard</a>
+<!-- =========================
+     NAVIGATION
+========================= -->
 
-<hr>
+<header class="topbar">
 
-<h1><%= invention.title %></h1>
+    <a href="/" class="logo">
+        💡 InventHub
+    </a>
 
-<p>
-    <strong>Inventor:</strong>
-    <%= invention.fullname %>
+    <a href="/dashboard" class="back-btn">
+        ← Back to Dashboard
+    </a>
 
-    <% if (invention.accountType === "pro") { %>
+</header>
 
-        <span style="
-            display:inline-block;
-            margin-left:8px;
-            padding:4px 10px;
-            background:#16a34a;
-            color:white;
-            border-radius:12px;
-            font-size:12px;
-            font-weight:bold;
-        ">
-            ⭐ PRO INVENTOR
-        </span>
 
-    <% } %>
-</p>
+<!-- =========================
+     PAGE
+========================= -->
 
-<% if (invention.image) { %>
-    <img
-        src="/uploads/<%= invention.image %>"
-        width="500"
-        style="max-width:100%; border-radius:10px;">
-<% } %>
+<main class="page">
 
-<hr>
+    <div class="invention-card">
 
-<p><strong>Category:</strong> <%= invention.category %></p>
+        <!-- =========================
+             IMAGE
+        ========================= -->
 
-<p><strong>Industry:</strong> <%= invention.industry %></p>
+        <% if (invention.image) { %>
 
-<p><strong>Country:</strong> <%= invention.country %></p>
+            <div class="image-section">
 
-<p><strong>Stage:</strong> <%= invention.stage %></p>
+                <img
+                    src="/uploads/<%= invention.image %>"
+                    alt="<%= invention.title %>"
+                >
 
-<p><strong>Looking For:</strong> <%= invention.lookingFor %></p>
+            </div>
 
-<hr>
+        <% } %>
 
-<h2>Description</h2>
 
-<p><%= invention.description %></p>
+        <!-- =========================
+             CONTENT
+        ========================= -->
 
-<hr>
+        <div class="content">
 
-<p>❤️ <strong><%= invention.likes %></strong> Likes</p>
+            <h1 class="title">
+                <%= invention.title %>
+            </h1>
 
-<form action="/like/<%= invention.id %>" method="POST">
-    <button>❤️ Like</button>
-</form>
 
-<br>
+            <!-- INVENTOR -->
 
-<a href="/message/<%= invention.userId %>/<%= invention.id %>">
-    <button>💬 Contact Inventor</button>
-</a>
+            <div class="inventor">
 
-<form action="/interest/<%= invention.id %>" method="POST">
-    <button>
-        💰 I'm Interested
-    </button>
-</form>
+                <span>
+                    Created by
+                </span>
+
+                <span class="inventor-name">
+                    <%= invention.fullname %>
+                </span>
+
+                <% if (invention.accountType === "pro") { %>
+
+                    <span class="pro-badge">
+                        ⭐ PRO INVENTOR
+                    </span>
+
+                <% } %>
+
+            </div>
+
+
+            <!-- =========================
+                 INFORMATION
+            ========================= -->
+
+            <div class="info-grid">
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        Category
+                    </div>
+
+                    <div class="info-value">
+                        <%= invention.category %>
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        Industry
+                    </div>
+
+                    <div class="info-value">
+                        <%= invention.industry %>
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        Country
+                    </div>
+
+                    <div class="info-value">
+                        🌍 <%= invention.country %>
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        Development Stage
+                    </div>
+
+                    <div class="info-value">
+                        <%= invention.stage %>
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        Looking For
+                    </div>
+
+                    <div class="info-value">
+                        <%= invention.lookingFor %>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 DESCRIPTION
+            ========================= -->
+
+            <section class="description-section">
+
+                <h2>
+                    About this invention
+                </h2>
+
+                <p class="description">
+                    <%= invention.description %>
+                </p>
+
+            </section>
+
+
+            <!-- =========================
+                 ACTIONS
+            ========================= -->
+
+            <section class="action-area">
+
+                <div class="likes">
+
+                    ❤️ <%= invention.likes %> Likes
+
+                </div>
+
+
+                <div class="actions">
+
+                    <!-- LIKE -->
+
+                    <form
+                        action="/like/<%= invention.id %>"
+                        method="POST"
+                    >
+
+                        <button
+                            type="submit"
+                            class="action-btn like-btn"
+                        >
+                            ❤️ Like
+                        </button>
+
+                    </form>
+
+
+                    <!-- CONTACT -->
+
+                    <a
+                        href="/message/<%= invention.userId %>/<%= invention.id %>"
+                        class="action-btn contact-btn"
+                    >
+                        💬 Contact Inventor
+                    </a>
+
+
+                    <!-- INTEREST -->
+
+                    <form
+                        action="/interest/<%= invention.id %>"
+                        method="POST"
+                    >
+
+                        <button
+                            type="submit"
+                            class="action-btn interest-btn"
+                        >
+                            💰 I'm Interested
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<footer class="footer">
+
+    © <%= new Date().getFullYear() %> InventHub · Connecting Ideas With Opportunity
+
+</footer>
 
 </body>
 </html>
