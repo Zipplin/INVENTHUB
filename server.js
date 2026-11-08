@@ -350,7 +350,8 @@ app.post("/upload", upload.single("image"), pushToSupabase, (req, res) => {
         country,
         description,
         stage,
-        lookingFor
+        lookingFor,
+        video_url
     } = req.body;
     const image = req.file ? req.file.filename : null;
     if (!req.session.user) {
@@ -361,8 +362,8 @@ const userId = req.session.user.id;
 
     const sql = `
         INSERT INTO inventions
-(title, category, industry, country, description, stage, lookingFor, image, userId)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+(title, category, industry, country, description, stage, lookingFor, image, userId, video_url)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)
     `;
 
     db.run(
@@ -376,7 +377,8 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     stage,
     lookingFor,
     image,
-    userId
+    userId,
+    video_url
 ] ,
         function(err) {
 

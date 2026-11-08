@@ -141,7 +141,11 @@
                         </div>
 
                         <p class="invention-description"><%= invention.description %></p>
-
+<% if (invention.video_url) { %>
+    <a href="<%= invention.video_url %>" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="margin-bottom: 14px; display: inline-block;">
+        ▶ Watch Video
+    </a>
+<% } %>
                         <div class="meta-row">
                             <span>🤝 Looking for: <%= invention.lookingFor %></span>
                         </div>
