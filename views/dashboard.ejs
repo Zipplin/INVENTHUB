@@ -153,9 +153,9 @@
                         <div class="action-bar">
 
                             <form action="/like/<%= invention.id %>" method="POST" style="display:inline;">
-                                <button type="submit" class="icon-btn">
-                                    ❤️ <%= invention.likes || 0 %>
-                                </button>
+                               <button type="submit" class="icon-btn">
+    ❤️ <%= invention.likes || 0 %> Likes
+</button>
                             </form>
 
                             <a href="/message/<%= invention.userId %>/<%= invention.id %>" class="icon-btn">
